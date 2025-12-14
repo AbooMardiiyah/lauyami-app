@@ -2,14 +2,19 @@
 
 Supports:
 - PDF files (using pypdf)
-- Image files (JPG, PNG) - using EasyOCR or pdf2image + OCR
+- Image files (JPG, PNG) - using EasyOCR (if installed)
 """
 
 import io
-import easyocr
-import numpy as np
 import tempfile
 from pathlib import Path
+
+try:
+    import easyocr
+    import numpy as np
+    OCR_AVAILABLE = True
+except ImportError:
+    OCR_AVAILABLE = False
 
 from fastapi import UploadFile
 from PIL import Image
@@ -85,9 +90,14 @@ async def _extract_text_from_image(image_bytes: bytes) -> str:
         Exception: For OCR errors.
 
     """
+    if not OCR_AVAILABLE:
+        logger.error("EasyOCR not installed. OCR not available for images.")
+        raise ImportError(
+            "EasyOCR is required for image OCR. Install with: pip install easyocr"
+        )
+    
     try:
-        
-        reader = easyocr.Reader(["en"], gpu=True)
+        reader = easyocr.Reader(["en"], gpu=False)  # Use CPU (GPU not available in container)
 
         image = Image.open(io.BytesIO(image_bytes))
         if image.mode != "RGB":
@@ -103,11 +113,6 @@ async def _extract_text_from_image(image_bytes: bytes) -> str:
         logger.info(f"OCR extracted {len(extracted_text)} characters from image")
         return extracted_text
 
-    except ImportError:
-        logger.error("EasyOCR not installed. Install with: pip install easyocr")
-        raise ImportError(
-            "EasyOCR is required for image OCR. Install with: pip install easyocr"
-        )
     except Exception as e:
         logger.error(f"Error during OCR: {e}")
         raise
