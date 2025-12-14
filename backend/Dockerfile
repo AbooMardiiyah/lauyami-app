@@ -21,8 +21,8 @@ COPY src/infrastructure/qdrant ./src/infrastructure/qdrant
 COPY src/models ./src/models
 COPY src/utils ./src/utils
 
-# Also copy README.md, pyproject.toml and uv.lock for the final sync
-COPY pyproject.toml uv.lock README.md ./
+# Also copy pyproject.toml and uv.lock for the final sync
+COPY pyproject.toml uv.lock ./
 
 # Install project dependencies into virtualenv
 RUN --mount=type=cache,target=/root/.cache/uv \
