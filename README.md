@@ -185,4 +185,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built for the hackathon** by Hamzat Tiamiyu (Adeiza) @[portfolio](https://aboomardiiyah.github.io/) | Empowering Nigerian tenants with AI
+**Built** by Hamzat Tiamiyu (Adeiza) @[portfolio](https://aboomardiiyah.github.io/) | Empowering Nigerian tenants with AI
