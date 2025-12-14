@@ -2,7 +2,6 @@
 name = "lauyami-project"
 version = "1.0.0"
 description = "AI-powered legal assistant for analyzing tenancy agreements using Lagos State Tenancy Law 2011"
-readme = "README.md"
 authors = [
     {name = "Benito Martin"}
 ]
