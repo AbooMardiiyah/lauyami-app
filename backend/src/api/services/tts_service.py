@@ -2,7 +2,7 @@
 
 import asyncio
 import httpx
- import re
+import re
 from src.config import settings
 from src.utils.logger_util import setup_logging
 
