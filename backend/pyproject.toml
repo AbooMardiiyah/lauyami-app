@@ -33,8 +33,9 @@ dependencies = [
     "sqlalchemy>=2.0.43",
     "psycopg2-binary>=2.9.10",
     
-    # Logging
+    # Logging & monitoring
     "loguru>=0.7.3",
+    "psutil>=7.0.0",
     
     # Text processing
     "langchain-text-splitters>=0.3.9",
