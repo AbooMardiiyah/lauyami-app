@@ -23,9 +23,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Copy source code selectively
 COPY src/api ./src/api
 COPY src/config.py ./src/config.py
-COPY src/infrastructure/qdrant ./src/infrastructure/qdrant
+COPY src/infrastructure ./src/infrastructure
 COPY src/models ./src/models
 COPY src/utils ./src/utils
+COPY src/__init__.py ./src/__init__.py
 
 # Also copy pyproject.toml and uv.lock for the final sync
 COPY pyproject.toml uv.lock ./
