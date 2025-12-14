@@ -5,8 +5,8 @@ import { Upload, FileText, Mic, Send, AlertTriangle, CheckCircle } from "lucide-
 const demoMessages = [
   {
     role: "user",
-    content: "What is this paper saying about quit notice? How many months?",
-    language: "Nigerian English",
+    content: "What is this paper saying about quit notice ehn?",
+    language: "Nigerian Accented English",
   },
   {
     role: "assistant",

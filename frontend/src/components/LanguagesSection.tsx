@@ -23,9 +23,9 @@ const languages = [
     speakers: "45M+",
   },
   {
-    name: "Nigerian Pidgin",
+    name: "Nigerian Accented English",
     native: "Naija",
-    example: "Wetin dey for this paper about quit notice?",
+    example: "What is this paper saying about quit notice ehn?",
     translation: "What does this paper say about quit notice?",
     speakers: "100M+",
   },

@@ -28,7 +28,7 @@ const HeroSection = () => {
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: "0.1s" }}>
-            Upload your agreement, ask questions in <strong>Hausa, Igbo, Yoruba,</strong> or <strong>Nigerian Pidgin</strong> — Lauya-mi explains complex legal terms in simple language.
+            Upload your agreement, ask questions in <strong>Hausa, Igbo, Yoruba,</strong> or <strong>Nigerian Accented English</strong> — Lauya-mi explains complex legal terms in simple language.
           </p>
 
           {/* CTA Buttons */}

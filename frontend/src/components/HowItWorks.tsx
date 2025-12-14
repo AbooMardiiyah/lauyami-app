@@ -19,7 +19,7 @@ const steps = [
     icon: MessageCircle,
     step: "03",
     title: "Ask in Your Language",
-    description: "Use voice or text to ask questions in Hausa, Igbo, Yoruba, or Nigerian Pidgin. Get clear, simple answers.",
+    description: "Use voice or text to ask questions in Hausa, Igbo, Yoruba, or Nigerian Accented English. Get clear, simple answers.",
     color: "accent",
   },
   {
