@@ -1,6 +1,10 @@
 from collections.abc import AsyncGenerator, Callable
 
-import opik
+try:
+    import opik
+    OPIK_AVAILABLE = True
+except ImportError:
+    OPIK_AVAILABLE = False
 
 from src.api.models.api_models import SearchResult
 from src.api.models.provider_models import MODEL_REGISTRY

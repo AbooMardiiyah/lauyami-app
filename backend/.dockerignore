@@ -56,7 +56,6 @@ images/
 # Project directories
 tests/
 src/pipelines/
-src/infrastructure/supabase/
 # uv.lock
 pre-commit-config.yaml
 # pyproject.toml

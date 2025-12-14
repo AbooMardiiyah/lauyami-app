@@ -1,4 +1,9 @@
-import opik
+try:
+    import opik
+    OPIK_AVAILABLE = True
+except ImportError:
+    OPIK_AVAILABLE = False
+
 from fastapi import Request
 from qdrant_client.models import (
     FieldCondition,
