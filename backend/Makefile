@@ -100,10 +100,11 @@ docker-build: ## Build Docker image for backend
 	docker build -t lauyami-backend:latest .
 	@echo "Docker image built successfully!"
 
-docker-run: ## Run Docker container (port 8080, use PORT=8000 to change)
+docker-run: ## Run Docker container (port 8080, requires .env file)
 	@echo "Starting Docker container on port 8080..."
 	@echo "API will be available at http://localhost:8080"
 	@echo "Health check: http://localhost:8080/health"
+	@echo "Note: Requires .env file with Qdrant and other API keys"
 	@echo "Press Ctrl+C to stop"
 	docker run --rm -p 8080:8080 --env-file .env lauyami-backend:latest
 
@@ -123,13 +124,14 @@ docker-test: ## Test Docker image (import check)
 	docker run --rm lauyami-backend:latest python -c "from src.api.main import app; print('✅ Docker image test passed!')"
 	@echo "Docker image test complete."
 
-docker-health: ## Test health endpoint in Docker container
+docker-health: ## Test health endpoint (requires .env file with Qdrant config)
 	@echo "Testing health endpoint..."
-	@docker run --rm -d -p 8081:8080 --name lauyami-backend-test lauyami-backend:latest || (docker stop lauyami-backend-test 2>/dev/null; docker rm lauyami-backend-test 2>/dev/null; docker run --rm -d -p 8081:8080 --name lauyami-backend-test lauyami-backend:latest)
-	@echo "Waiting for container to start..."
-	@sleep 5
+	@echo "Note: This requires .env file with Qdrant connection details"
+	@docker run --rm -d -p 8081:8080 --env-file .env --name lauyami-backend-test lauyami-backend:latest || (docker stop lauyami-backend-test 2>/dev/null; docker rm lauyami-backend-test 2>/dev/null; docker run --rm -d -p 8081:8080 --env-file .env --name lauyami-backend-test lauyami-backend:latest)
+	@echo "Waiting for container to start (10 seconds)..."
+	@sleep 10
 	@echo "Testing health endpoint at http://localhost:8081/health..."
-	@curl -f http://localhost:8081/health && echo "" || (echo "❌ Health check failed"; docker logs lauyami-backend-test 2>&1 | tail -20)
+	@curl -s -f http://localhost:8081/health && echo "" && echo "✅ Health check passed!" || (echo "❌ Health check failed"; echo "Container logs:"; docker logs lauyami-backend-test 2>&1 | tail -30)
 	@docker stop lauyami-backend-test 2>/dev/null || true
 	@docker rm lauyami-backend-test 2>/dev/null || true
 	@echo "Health check complete."
