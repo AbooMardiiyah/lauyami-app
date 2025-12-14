@@ -55,7 +55,6 @@ images/
 
 # Project directories
 tests/
-src/pipelines/
 # uv.lock
 pre-commit-config.yaml
 # pyproject.toml

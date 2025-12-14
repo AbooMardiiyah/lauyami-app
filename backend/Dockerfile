@@ -25,6 +25,7 @@ COPY src/api ./src/api
 COPY src/config.py ./src/config.py
 COPY src/infrastructure ./src/infrastructure
 COPY src/models ./src/models
+COPY src/pipelines ./src/pipelines
 COPY src/utils ./src/utils
 COPY src/__init__.py ./src/__init__.py
 
