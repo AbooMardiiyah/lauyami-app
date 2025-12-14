@@ -212,16 +212,16 @@ async def query_unique_titles(
     logger.info(f"Fetching up to {fetch_limit} points for unique titles.")
 
     try:
-    response = await vectorstore.client.query_points(
-        collection_name=vectorstore.collection_name,
-        query=FusionQuery(fusion=Fusion.RRF),
-        prefetch=[
-            Prefetch(query=dense_vector, using="Dense", limit=fetch_limit, filter=query_filter),
-            Prefetch(query=sparse_vector, using="Sparse", limit=fetch_limit, filter=query_filter),
-        ],
-        query_filter=query_filter,
-        limit=fetch_limit,
-    )
+        response = await vectorstore.client.query_points(
+            collection_name=vectorstore.collection_name,
+            query=FusionQuery(fusion=Fusion.RRF),
+            prefetch=[
+                Prefetch(query=dense_vector, using="Dense", limit=fetch_limit, filter=query_filter),
+                Prefetch(query=sparse_vector, using="Sparse", limit=fetch_limit, filter=query_filter),
+            ],
+            query_filter=query_filter,
+            limit=fetch_limit,
+        )
     except Exception as e:
         logger.warning(f"Error querying reference law collection: {e}")
         response = None
@@ -230,25 +230,25 @@ async def query_unique_titles(
     seen_titles: set[str] = set()
     results: list[SearchResult] = []
     if response and hasattr(response, "points") and response.points:
-    for point in response.points:
-        payload = point.payload or {}
-        title = payload.get("title")
-        if not title or title in seen_titles:
-            continue
-        seen_titles.add(title)
-        results.append(
-            SearchResult(
-                title=title,
-                feed_author=payload.get("feed_author"),
-                feed_name=payload.get("feed_name"),
-                article_author=payload.get("article_authors"),
-                url=payload.get("url"),
-                chunk_text=payload.get("chunk_text"),
-                score=point.score,
+        for point in response.points:
+            payload = point.payload or {}
+            title = payload.get("title")
+            if not title or title in seen_titles:
+                continue
+            seen_titles.add(title)
+            results.append(
+                SearchResult(
+                    title=title,
+                    feed_author=payload.get("feed_author"),
+                    feed_name=payload.get("feed_name"),
+                    article_author=payload.get("article_authors"),
+                    url=payload.get("url"),
+                    chunk_text=payload.get("chunk_text"),
+                    score=point.score,
+                )
             )
-        )
-        if len(results) >= limit:
-            break
+            if len(results) >= limit:
+                break
 
     logger.info(f"Returning {len(results)} unique title results for matching query '{query_text}'")
 
