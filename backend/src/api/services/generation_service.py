@@ -5,6 +5,13 @@ try:
     OPIK_AVAILABLE = True
 except ImportError:
     OPIK_AVAILABLE = False
+    # No-op decorator when opik is not available
+    class opik:
+        @staticmethod
+        def track(name=None, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
 
 from src.api.models.api_models import SearchResult
 from src.api.models.provider_models import MODEL_REGISTRY
