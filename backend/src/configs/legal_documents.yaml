@@ -1,0 +1,14 @@
+documents:
+  - pdf_path: "data/Tenancy-Law-2011.pdf"
+    document_title: "Lagos State Tenancy Law 2011"
+    jurisdiction: "Lagos State"
+    document_id: "lagos-tenancy-law-2011"
+    effective_date: "2011-08-24"
+
+  # Add more documents here as needed:
+  # - pdf_path: "data/another-law.pdf"
+  #   document_title: "Another Legal Document"
+  #   jurisdiction: "Federal"
+  #   document_id: "another-document-id"
+  #   effective_date: "2020-01-01"
+
