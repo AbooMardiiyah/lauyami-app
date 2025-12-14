@@ -37,7 +37,7 @@
   - [Getting Started](#getting-started)
     - [Local Development](#local-development)
     - [Deployment](#deployment)
-  - [Services & Providers](#services--providers)
+  - [Services \& Providers](#services--providers)
   - [Future Improvements](#future-improvements)
   - [License](#license)
   
