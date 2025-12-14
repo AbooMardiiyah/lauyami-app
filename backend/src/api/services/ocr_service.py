@@ -18,11 +18,54 @@ except ImportError:
 
 from fastapi import UploadFile
 from PIL import Image
+from pypdf import PdfReader
+from pypdf.errors import PdfReadError
 
-from src.pipelines.tasks.extract_pdf import extract_pdf_text
 from src.utils.logger_util import setup_logging
 
 logger = setup_logging()
+
+
+def _extract_pdf_text(pdf_path: Path) -> str:
+    """Extract all text from a PDF file.
+
+    Args:
+        pdf_path (Path): Path to the PDF file.
+
+    Returns:
+        str: Extracted text content from the PDF.
+
+    Raises:
+        FileNotFoundError: If the PDF file does not exist.
+        PdfReadError: If the PDF cannot be read or is corrupted.
+    """
+    if not pdf_path.exists():
+        raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+
+    logger.info(f"Extracting text from PDF: {pdf_path}")
+    try:
+        reader = PdfReader(pdf_path)
+        text_parts = []
+
+        for page_num, page in enumerate(reader.pages, start=1):
+            try:
+                text = page.extract_text()
+                if text.strip():
+                    text_parts.append(text)
+            except Exception as e:
+                logger.warning(f"Could not extract text from page {page_num}: {e}")
+                continue
+
+        full_text = "\n\n".join(text_parts)
+        logger.info(f"Successfully extracted {len(full_text)} characters from PDF")
+        return full_text
+
+    except PdfReadError as e:
+        logger.error(f"PDF read error: {e}")
+        raise PdfReadError(f"Could not read PDF: {e}")
+    except Exception as e:
+        logger.error(f"Unexpected error during PDF extraction: {e}")
+        raise Exception(f"Failed to extract text from PDF: {e}")
 
 
 async def extract_text_from_file(file: UploadFile) -> str:
@@ -53,7 +96,7 @@ async def extract_text_from_file(file: UploadFile) -> str:
                 tmp_path = tmp_file.name
 
             try:
-                text = extract_pdf_text(tmp_path)
+                text = _extract_pdf_text(Path(tmp_path))
                 return text
             finally:
                 Path(tmp_path).unlink(missing_ok=True)
