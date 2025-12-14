@@ -386,7 +386,7 @@ const AppPage = () => {
       } catch (error) {
         setIsProcessingVoice(false);
         console.error("Voice query error:", error);
-        toast({
+    toast({
           title: "Voice query failed",
           description: error instanceof Error ? error.message : "Failed to process voice query",
           variant: "destructive",
@@ -595,7 +595,7 @@ const AppPage = () => {
     // Render last section
     if (currentSection.length > 0) {
       elements.push(renderSection(currentSection, sectionType, elements.length));
-    }
+      }
 
     return elements.length > 0 ? elements : <div className="whitespace-pre-wrap text-sm text-foreground">{text}</div>;
   };
@@ -671,13 +671,13 @@ const AppPage = () => {
             </div>
 
             {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
 
             {/* Analysis View - Only shown when analyzing/viewing analysis */}
             {activeView === "analysis" && (
@@ -714,7 +714,7 @@ const AppPage = () => {
                     <div className="space-y-6">
                       {/* Progress Indicator */}
                       <div className="flex flex-col items-center justify-center py-8 space-y-4">
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
                         <div className="text-center">
                           <p className="text-muted-foreground mb-2 font-medium">
                             {progressStatus || "Analyzing document..."}
@@ -761,7 +761,7 @@ const AppPage = () => {
                                 handleDownloadReport("pdf", includeAudio, analysisLanguage);
                               }}
                             />
-                          </div>
+                        </div>
                         </>
                       ) : (
                         <div className="text-center py-12 text-muted-foreground">
@@ -793,19 +793,19 @@ const AppPage = () => {
                 {/* Chat Header with Mode Indicator */}
                 <div className="gradient-hero px-6 py-4">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
                         <MessageCircle className="w-5 h-5 text-primary-foreground" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-primary-foreground">
-                          Lauya-mi
-                        </h3>
-                        <p className="text-sm text-primary-foreground/70">
-                          Your AI Legal Assistant
-                        </p>
-                      </div>
                     </div>
+                    <div>
+                      <h3 className="font-semibold text-primary-foreground">
+                          Lauya-mi
+                      </h3>
+                      <p className="text-sm text-primary-foreground/70">
+                          Your AI Legal Assistant
+                      </p>
+                    </div>
+                  </div>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
@@ -989,7 +989,7 @@ const AppPage = () => {
                       ) : isProcessingVoice ? (
                         <Loader2 className="w-5 h-5 text-secondary-foreground animate-spin" />
                       ) : (
-                        <Mic className="w-5 h-5 text-secondary-foreground" />
+                      <Mic className="w-5 h-5 text-secondary-foreground" />
                       )}
                     </button>
                     <button
