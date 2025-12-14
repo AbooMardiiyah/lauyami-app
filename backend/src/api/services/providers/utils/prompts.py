@@ -37,9 +37,9 @@ that is retrieved from a vector database without relying on outside knowledge or
 
 # Create a new prompt (only if opik is available)
 if OPIK_AVAILABLE:
-prompt = opik.Prompt(
+    prompt = opik.Prompt(
         name="lauyami_legal_assistant", prompt=PROMPT, metadata={"environment": "development"}
-)
+    )
 else:
     prompt = None
 
