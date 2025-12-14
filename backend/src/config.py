@@ -106,14 +106,7 @@ class JinaSettings(BaseModel):
 # 2. FastEmbed - downloading embedding models (BAAI/bge-base-en) from HF Hub
 class HuggingFaceSettings(BaseModel):
     api_key: str = Field(default="", description="Hugging Face API key (HF_TOKEN)")
-
-
-# -----------------------------
-# Openai Settings
-# -----------------------------
-class OpenAISettings(BaseModel):
-    api_key: str | None = Field(default="", description="OpenAI API key")
-    # model: str = Field(default="gpt-4o-mini", description="OpenAI model name")
+    model: str = Field(default="BAAI/bge-base-en", description="Hugging Face model name")
 
 
 # -----------------------------
