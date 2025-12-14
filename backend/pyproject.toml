@@ -25,6 +25,9 @@ dependencies = [
     "qdrant-client>=1.15.1",
     "fastembed>=0.7.2",
     
+    # OpenAI SDK (used by N-ATLaS for OpenAI-compatible API)
+    "openai>=1.103.0",
+    
     # Database (optional - if using Supabase)
     "supabase>=2.18.1",
     "sqlalchemy>=2.0.43",
