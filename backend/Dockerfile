@@ -60,4 +60,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE $PORT
 
 # Run FastAPI with uvicorn
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1", "--loop", "uvloop"]
+# Use PORT env var (Cloud Run sets this) or default to 8080
+CMD uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --loop uvloop
