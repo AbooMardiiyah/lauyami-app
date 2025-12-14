@@ -1,5 +1,5 @@
 try:
-import opik
+    import opik
     OPIK_AVAILABLE = True
 except ImportError:
     OPIK_AVAILABLE = False
