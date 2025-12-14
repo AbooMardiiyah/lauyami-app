@@ -1,5 +1,14 @@
-from opik.evaluation import models
-from opik.evaluation.metrics import GEval
+try:
+    from opik.evaluation import models
+    from opik.evaluation.metrics import GEval
+    OPIK_AVAILABLE = True
+except ImportError:
+    OPIK_AVAILABLE = False
+    # Stub classes when opik is not available
+    class models:
+        pass
+    class GEval:
+        pass
 
 from src.config import settings
 from src.utils.logger_util import setup_logging

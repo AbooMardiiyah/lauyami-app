@@ -16,7 +16,6 @@ except ImportError:
 from src.api.models.api_models import SearchResult
 from src.api.models.provider_models import MODEL_REGISTRY
 from src.api.services.providers.natlas_service import stream_natlas
-from src.api.services.providers.openai_service import stream_openai
 from src.api.services.providers.utils.prompts import build_research_prompt
 from src.utils.logger_util import setup_logging
 
@@ -48,7 +47,7 @@ def get_streaming_function(
     logger.info(f"Using model config: {config}")
 
     async def stream_gen() -> AsyncGenerator[str, None]:
-        """Asynchronous generator that streams response chunks from the specified provider.
+        """Asynchronous generator that streams response chunks from N-ATLaS.
 
         Yields:
             str: The next chunk of the response.
@@ -56,17 +55,11 @@ def get_streaming_function(
         """
         buffer = []  # collect all chunks here
 
-        if provider_lower == "openai":
-            async for chunk in stream_openai(prompt, config=config):
-                buffer.append(chunk)
-                yield chunk
-
-        elif provider_lower == "natlas":
+        if provider_lower == "natlas":
             async for chunk in stream_natlas(prompt, config=config):
                 buffer.append(chunk)
                 yield chunk
-
         else:
-            raise ValueError(f"Unknown provider: {provider}. Only 'openai' and 'natlas' are supported.")
+            raise ValueError(f"Unknown provider: {provider}. Only 'natlas' is supported for this hackathon.")
 
     return stream_gen
