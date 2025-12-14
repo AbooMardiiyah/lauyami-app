@@ -92,6 +92,46 @@ run-dev: ## Run FastAPI development server on port 8000
 	uv run uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 
 #################################################################################
+## Docker Commands
+#################################################################################
+
+docker-build: ## Build Docker image for backend
+	@echo "Building Docker image: lauyami-backend:latest..."
+	docker build -t lauyami-backend:latest .
+	@echo "Docker image built successfully!"
+
+docker-run: ## Run Docker container (port 8080)
+	@echo "Starting Docker container on port 8080..."
+	@echo "API will be available at http://localhost:8080"
+	@echo "Press Ctrl+C to stop"
+	docker run --rm -p 8080:8080 --env-file .env lauyami-backend:latest
+
+docker-run-detached: ## Run Docker container in background
+	@echo "Starting Docker container in background on port 8080..."
+	docker run -d -p 8080:8080 --name lauyami-backend --env-file .env lauyami-backend:latest
+	@echo "Container running. Use 'make docker-stop' to stop it."
+
+docker-stop: ## Stop running Docker container
+	@echo "Stopping Docker container..."
+	docker stop lauyami-backend || true
+	docker rm lauyami-backend || true
+	@echo "Container stopped."
+
+docker-test: ## Test Docker image (import check)
+	@echo "Testing Docker image..."
+	docker run --rm lauyami-backend:latest python -c "from src.api.main import app; print('✅ Docker image test passed!')"
+	@echo "Docker image test complete."
+
+docker-health: ## Test health endpoint in Docker container
+	@echo "Testing health endpoint..."
+	@docker run --rm -d -p 8080:8080 --name lauyami-backend-test lauyami-backend:latest || true
+	@sleep 3
+	@curl -f http://localhost:8080/health || echo "Health check failed"
+	@docker stop lauyami-backend-test || true
+	@docker rm lauyami-backend-test || true
+	@echo "Health check complete."
+
+#################################################################################
 ## Gradio Commands
 #################################################################################
 
