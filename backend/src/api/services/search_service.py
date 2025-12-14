@@ -107,38 +107,38 @@ async def query_with_filters(
     logger.info(f"Fetching up to {fetch_limit} points for unique Ids.")
 
     try:
-    response = await vectorstore.client.query_points(
-        collection_name=vectorstore.collection_name,
-        query=FusionQuery(fusion=Fusion.RRF),
-        prefetch=[
-            Prefetch(query=dense_vector, using="Dense", limit=fetch_limit, filter=query_filter),
-            Prefetch(query=sparse_vector, using="Sparse", limit=fetch_limit, filter=query_filter),
-        ],
-        query_filter=query_filter,
-        limit=fetch_limit,
-    )
+        response = await vectorstore.client.query_points(
+            collection_name=vectorstore.collection_name,
+            query=FusionQuery(fusion=Fusion.RRF),
+            prefetch=[
+                Prefetch(query=dense_vector, using="Dense", limit=fetch_limit, filter=query_filter),
+                Prefetch(query=sparse_vector, using="Sparse", limit=fetch_limit, filter=query_filter),
+            ],
+            query_filter=query_filter,
+            limit=fetch_limit,
+        )
     except Exception as e:
         logger.warning(f"Error querying reference law collection: {e}")
         response = None
     seen_ids: set[str] = set()
     results: list[SearchResult] = []
     if response and hasattr(response, "points") and response.points:
-    for point in response.points:
-        if point.id in seen_ids:
-            continue
-        seen_ids.add(point.id)  # type: ignore
-        payload = point.payload or {}
-        results.append(
-            SearchResult(
-                title=payload.get("title", ""),
-                feed_author=payload.get("feed_author"),
-                feed_name=payload.get("feed_name"),
-                article_author=payload.get("article_authors"),
-                url=payload.get("url"),
-                chunk_text=payload.get("chunk_text"),
-                score=point.score,
+        for point in response.points:
+            if point.id in seen_ids:
+                continue
+            seen_ids.add(point.id)  # type: ignore
+            payload = point.payload or {}
+            results.append(
+                SearchResult(
+                    title=payload.get("title", ""),
+                    feed_author=payload.get("feed_author"),
+                    feed_name=payload.get("feed_name"),
+                    article_author=payload.get("article_authors"),
+                    url=payload.get("url"),
+                    chunk_text=payload.get("chunk_text"),
+                    score=point.score,
+                )
             )
-        )
 
     results = results[:limit]
     
