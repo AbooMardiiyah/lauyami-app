@@ -161,7 +161,6 @@ This project integrates several best-in-class services:
 | Supabase | PostgreSQL database for legal docs    | [Supabase](https://supabase.com/docs)                                       |
 | Qdrant   | Vector DB for semantic search         | [Qdrant](https://qdrant.tech/documentation/)                                |
 | Modal    | N-ATLaS LLM & ASR hosting             | [Modal](https://modal.com/docs)                                             |
-                             |
 | YarnGPT  | Nigerian language TTS                 | [YarnGPT](https://yarngpt.ai/)                                              |
 | Docker   | Containerization                      | [Docker](https://docs.docker.com/)                                          |
 | FastAPI  | API framework                         | [FastAPI](https://fastapi.tiangolo.com/)                                    |
