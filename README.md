@@ -25,22 +25,23 @@
   <em>An AI-powered legal assistant for analyzing tenancy agreements using Lagos State Tenancy Law 2011</em>
 </p>
 
-## 📚 Table of Contents
+## Table of Contents
 
 - [Lauyami Legal Assistant](#lauyami-legal-assistant)
-  - [📚 Table of Contents](#-table-of-contents)
-  - [🎯 About Lauyami](#-about-lauyami)
-  - [👥 Who Is This For?](#-who-is-this-for)
-  - [🧑‍🎓 Key Features](#-key-features)
-  - [🎓 Prerequisites](#-prerequisites)
-  - [📚 Technology Stack](#-technology-stack)
-  - [🚀 Getting Started](#-getting-started)
+  - [Table of Contents](#table-of-contents)
+  - [About Lauyami](#about-lauyami)
+  - [Who Is This For?](#who-is-this-for)
+  - [Key Features](#key-features)
+  - [Prerequisites](#prerequisites)
+  - [Technology Stack](#technology-stack)
+  - [Getting Started](#getting-started)
     - [Local Development](#local-development)
     - [Deployment](#deployment)
-  - [🔌 Services \& Providers](#-services--providers)
-  - [🪪 License](#-license)
+  - [Services & Providers](#services--providers)
+  - [Future Improvements](#future-improvements)
+  - [License](#license)
   
-## 🎯 About Lauyami
+## About Lauyami
 
 Lauyami is an AI-powered legal assistant that helps tenants and landlords understand tenancy agreements in the context of Lagos State Tenancy Law 2011. The application provides:
 
@@ -50,7 +51,7 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
 - **Interactive Chat**: Ask follow-up questions about your agreement or general tenancy law questions
 - **PDF Reports**: Download beautifully formatted reports with color-coded warnings and recommendations
 
-## 👥 Who Is This For?
+## Who Is This For?
 
 | Audience              | Why Use Lauyami?                                      |
 |-----------------------|-------------------------------------------------------|
@@ -59,7 +60,7 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
 | Legal Professionals   | Quick analysis tool for tenancy agreements            |
 | Property Managers     | Validate agreements before signing                    |
 
-## 🧑‍🎓 Key Features
+## Key Features
 
 - **RAG-Powered Analysis**: Retrieval-Augmented Generation using Lagos State Tenancy Law 2011
 - **Multilingual ASR**: Voice input in Nigerian languages (N-ATLaS model)
@@ -71,7 +72,7 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
 
 ![Lauyami UI](static/gradio_app.png)
 
-## 🎓 Prerequisites
+## Prerequisites
 
 - Python 3.12+
 - Basic understanding of REST APIs
@@ -82,7 +83,7 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
   - HuggingFace (model downloads)
   - YarnGPT (text-to-speech)
 
-## 📚 Technology Stack
+## Technology Stack
 
 **Backend:**
 - FastAPI (REST API)
@@ -103,7 +104,7 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
 - YarnGPT (text-to-speech in Nigerian languages)
 - FastEmbed (embeddings)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Local Development
 
@@ -151,7 +152,7 @@ cd frontend
 vercel
 ```
 
-## 🔌 Services & Providers
+## Services & Providers
 
 This project integrates several best-in-class services:
 
@@ -167,7 +168,7 @@ This project integrates several best-in-class services:
 | Google Cloud Run | Backend deployment               | [Cloud Run](https://cloud.google.com/run/docs)                              |
 | Vercel   | Frontend deployment                   | [Vercel](https://vercel.com/docs)                                           |
 
-## 🔮 Future Improvements
+## Future Improvements
 
 1. **Fine-tune N-ATLaS LLM** on tenancy agreements and property legal documents
 2. **Expand Jurisdiction** - Add Abuja, Ibadan, and other Nigerian states tenancy laws
@@ -178,7 +179,7 @@ This project integrates several best-in-class services:
 7. **Microservices Architecture** - Migrate from monolith to distributed services
 8. **Pricing & Personalization** - Add subscription tiers and user accounts
 
-## 🪪 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
