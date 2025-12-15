@@ -1,6 +1,6 @@
 # Lauyami Legal Assistant
 
-![Lauyami App](static/frontend_lauyami_app.png)
+![Lauyami App](static/frontend_lauyami_app.png?v=2)
 
 <div align="center">
 
