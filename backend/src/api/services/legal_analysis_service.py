@@ -80,11 +80,11 @@ async def analyze_agreement_for_risks_stream(
     for label, contexts in results:
         all_contexts.extend(contexts)
 
-    seen_urls = set()
+    seen_document_ids = set()
     unique_contexts = []
     for ctx in all_contexts:
-        if ctx.url and ctx.url not in seen_urls:
-            seen_urls.add(ctx.url)
+        if ctx.document_id and ctx.document_id not in seen_document_ids:
+            seen_document_ids.add(ctx.document_id)
             unique_contexts.append(ctx)
 
     logger.info(f"Building legal analysis prompt (streaming) with {len(unique_contexts)} context chunks")

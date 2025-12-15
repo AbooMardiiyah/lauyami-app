@@ -72,6 +72,7 @@ async def ask_with_voice(
             provider=provider,
             query=transcribed_text,
             contexts=search_results,
+            language=language,
         )
         
         async def voice_stream_generator():

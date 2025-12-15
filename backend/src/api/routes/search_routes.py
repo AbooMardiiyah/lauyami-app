@@ -67,7 +67,7 @@ async def ask_with_generation_stream(request: Request, ask: AskRequest):
     )
 
     stream_func = get_streaming_function(
-        provider=ask.provider, query=ask.query_text, contexts=results, selected_model=ask.model
+        provider=ask.provider, query=ask.query_text, contexts=results, selected_model=ask.model, language=ask.language
     )
 
     async def stream_generator():

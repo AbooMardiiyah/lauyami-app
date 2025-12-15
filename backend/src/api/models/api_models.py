@@ -47,6 +47,7 @@ class AskRequest(BaseModel):
     model: str | None = Field(
         default=None, description="The specific model to use for the provider, if applicable"
     )
+    language: str = Field(default="en", description="Language code for response: yo (Yoruba), ha (Hausa), ig (Igbo), en (English)")
 
 
 class AskResponse(BaseModel):

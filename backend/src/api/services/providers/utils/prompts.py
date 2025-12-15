@@ -14,6 +14,7 @@ You are a skilled legal research assistant specialized in analyzing tenancy agre
 Respond to the user's query using the provided context from legal documents,
 that is retrieved from a vector database without relying on outside knowledge or assumptions.
 
+**IMPORTANT: You MUST respond in {language_name}. All your output must be in {language_name}.**
 
 ### Output Rules:
 - Write a detailed, structured answer using **Markdown** (headings, bullet points,
@@ -24,6 +25,7 @@ that is retrieved from a vector database without relying on outside knowledge or
 - There is no need to mention that you based your answer on the provided context.
 - But if no relevant information exists, clearly state this and provide a fallback suggestion.
 - At the very end, include a **funny quote** and wish the user a great day.
+- **CRITICAL: Respond entirely in {language_name}. Do not mix languages.**
 
 ### Query:
 {query}
@@ -31,7 +33,7 @@ that is retrieved from a vector database without relying on outside knowledge or
 ### Context Documents:
 {context_texts}
 
-### Final Answer:
+### Final Answer (in {language_name}):
 """
 
 
@@ -51,6 +53,7 @@ def build_research_prompt(
     contexts: list[SearchResult],
     query: str = "",
     tokens: int = config.max_completion_tokens,
+    language: str = "en",
 ) -> str:
     """Construct a research-focused LLM prompt using the given query
     and supporting context documents.
@@ -79,8 +82,18 @@ def build_research_prompt(
         for r in contexts
     )
 
+    # Map language codes to language names
+    language_names = {
+        "en": "English",
+        "yo": "Yoruba",
+        "ha": "Hausa",
+        "ig": "Igbo",
+    }
+    language_name = language_names.get(language, "English")
+    
     return PROMPT.format(
         query=query,
         context_texts=context_texts,
         tokens=tokens,
+        language_name=language_name,
     )

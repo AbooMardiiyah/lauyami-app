@@ -28,6 +28,7 @@ def get_streaming_function(
     query: str,
     contexts: list[SearchResult],
     selected_model: str | None = None,
+    language: str = "en",
 ) -> Callable[[], AsyncGenerator[str, None]]:
     """Get a streaming function for the specified LLM provider.
 
@@ -41,10 +42,10 @@ def get_streaming_function(
         response chunks.
 
     """
-    prompt = build_research_prompt(contexts, query=query)
+    prompt = build_research_prompt(contexts, query=query, language=language)
     provider_lower = provider.lower()
     config = MODEL_REGISTRY.get_config(provider_lower)
-    logger.info(f"Using model config: {config}")
+    logger.info(f"Using model config: {config}, language: {language}")
 
     async def stream_gen() -> AsyncGenerator[str, None]:
         """Asynchronous generator that streams response chunks from N-ATLaS.

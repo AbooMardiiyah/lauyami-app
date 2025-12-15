@@ -149,7 +149,7 @@ const AppPage = () => {
 
     const query = queryInput.trim();
     setQueryInput("");
-    await sendMessage(query, sessionId, "en", "natlas");
+    await sendMessage(query, sessionId, analysisLanguage || "en", "natlas");
   };
 
   const startRecording = async () => {
@@ -261,7 +261,7 @@ const AppPage = () => {
       if (queryInput.trim()) {
         const query = queryInput.trim();
         setQueryInput("");
-        await sendMessage(query, sessionId, "en", "natlas");
+        await sendMessage(query, sessionId, analysisLanguage || "en", "natlas");
       }
       return;
     }
@@ -317,7 +317,7 @@ const AppPage = () => {
       try {
         const request: VoiceAskRequest = {
           session_id: sessionId,
-          language: "en", // Can be made configurable
+          language: analysisLanguage || "en", // Use selected language from language selector
           limit: 5,
           provider: "natlas",
         };

@@ -34,6 +34,7 @@ export interface AskRequest {
   limit?: number;
   provider?: string;
   model?: string | null;
+  language?: string;
 }
 
 export interface AskResponse {
@@ -95,6 +96,7 @@ export async function* askQuestionStream(
       limit: request.limit || 5,
       provider: request.provider || "natlas",
       model: request.model || null,
+      language: request.language || "en",
     }),
   });
 

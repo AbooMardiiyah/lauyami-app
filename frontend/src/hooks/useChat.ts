@@ -122,6 +122,7 @@ export function useChat(enableStreaming: boolean = true) {
         session_id: sessionId || localStorage.getItem("session_id") || null,
         provider,
         limit: 5,
+        language: language || "en",
       };
 
       try {

@@ -278,7 +278,6 @@ The repository includes sample tenancy agreement PDFs in the `tenancy_agreements
 
 ### Deployment
 
-See [CLOUD_RUN_DEPLOYMENT_GUIDE.md](../CLOUD_RUN_DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
 
 **Quick Deploy:**
 ```bash
