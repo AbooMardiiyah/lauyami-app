@@ -139,7 +139,7 @@ class SessionVectorStore:
             )
             all_payloads.append(payload)
             all_chunks_text.append(chunk)
-            chunk_id = int(hashlib.md5(payload.url.encode()).hexdigest()[:8], 16)
+            chunk_id = int(hashlib.md5(payload.document_id.encode()).hexdigest()[:8], 16)
             all_ids.append(chunk_id)
 
         batch_size = 10
