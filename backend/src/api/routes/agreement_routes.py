@@ -5,7 +5,7 @@ import json
 from fastapi import APIRouter, File, Form, Request, UploadFile
 from fastapi.responses import StreamingResponse
 
-from src.api.models.api_models import UploadAgreementResponse  # Only used in commented endpoint
+# UploadAgreementResponse is available for future non-streaming endpoints
 from src.api.services.document_storage_service import (
     generate_session_id,
     store_uploaded_document,
