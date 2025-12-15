@@ -33,8 +33,8 @@ async def search_unique(request: Request, params: UniqueTitleRequest):
     results = await query_unique_titles(
         request=request,
         query_text=params.query_text,
-        feed_author=params.feed_author,
-        feed_name=params.feed_name,
+        jurisdiction=params.jurisdiction,
+        document_title=params.document_title,
         title_keywords=params.title_keywords,
         limit=params.limit,
     )
@@ -60,8 +60,8 @@ async def ask_with_generation_stream(request: Request, ask: AskRequest):
         request,
         query_text=ask.query_text,
         session_id=ask.session_id,
-        feed_author=ask.feed_author,
-        feed_name=ask.feed_name,
+        jurisdiction=ask.jurisdiction,
+        document_title=ask.document_title,
         title_keywords=ask.title_keywords,
         limit=ask.limit,
     )
