@@ -13,135 +13,6 @@ from src.utils.logger_util import setup_logging
 logger = setup_logging()
 
 
-# async def analyze_agreement_for_risks(
-#     agreement_text: str,
-#     request,
-#     language: str = "en",
-# ) -> dict:
-#     """Analyze a tenant agreement and flag clauses that violate Lagos State Tenancy Law 2011.
-
-#     Args:
-#         agreement_text (str): Extracted text from the uploaded agreement.
-#         language (str): Language code for response (yo, ha, ig, en). Defaults to "en".
-#         request: FastAPI request object (needed for vector store access).
-
-#     Returns:
-#         dict: Analysis results with:
-#             - flagged_clauses: List of clauses that may violate the law
-#             - risks: List of identified risks
-#             - summary: Overall summary of the agreement
-#             - recommendations: Recommendations for the tenant
-
-#     """
-#     # Step 1: Search for relevant legal provisions in RAG
-#     # Search for common tenancy law topics (parallelized for better performance)
-#     search_queries = [
-#         "advance rent payment maximum",
-#         "tenant rights obligations",
-#         "landlord obligations",
-#         "notice period requirements",
-#         "service charges deposits",
-#         "unlawful eviction protection",
-#     ]
-
-#     # Run all RAG queries in parallel instead of sequentially
-#     async def fetch_context(query: str) -> list[SearchResult]:
-#         try:
-#             contexts = await query_with_filters(
-#                 request=request,
-#                 query_text=query,
-#                 feed_name="Lagos State Tenancy Law 2011",
-#                 feed_author="Lagos State",
-#                 limit=3,
-#             )
-#             return contexts if contexts else []
-#         except Exception as e:
-#             logger.warning(f"Error searching for context '{query}': {e}")
-#             return []
-
-#     # Execute all queries in parallel
-#     results = await asyncio.gather(*[fetch_context(query) for query in search_queries])
-    
-#     # Flatten results
-#     all_contexts: list[SearchResult] = []
-#     for contexts in results:
-#         all_contexts.extend(contexts)
-
-#     # Remove duplicates by URL
-#     seen_urls = set()
-#     unique_contexts = []
-#     for ctx in all_contexts:
-#         if ctx.url and ctx.url not in seen_urls:
-#             seen_urls.add(ctx.url)
-#             unique_contexts.append(ctx)
-
-#     # Step 2: Build analysis prompt
-#     logger.info(f"Building legal analysis prompt with {len(unique_contexts)} context chunks")
-    
-#     analysis_prompt = f"""You are a legal assistant specializing in Lagos State Tenancy Law 2011. Review the tenant agreement and identify any clauses that violate or conflict with the law. Be concise and confident. Always analyze the SAME document the SAME way for consistency.
-
-# AGREEMENT TEXT:
-# {agreement_text[:8000]}
-
-# RELEVANT LEGAL PROVISIONS (Lagos State Tenancy Law 2011):
-# {chr(10).join([f"- {ctx.chunk_text[:500]}" for ctx in unique_contexts[:10]]) if unique_contexts else "- No specific legal provisions retrieved. Use your knowledge of Lagos State Tenancy Law 2011."}
-
-# Provide a concise, confident analysis. Be direct and actionable. Keep responses brief - maximum 3-4 key points.
-
-# **Format your response EXACTLY as follows (use this exact structure every time):**
-
-# 1. Start with: "Based on your tenancy agreement (Section [X]), [one clear sentence about what it says]."
-
-# 2. For each issue found, use this EXACT format (one line each, in this order):
-#    - ✅ **Your Right:** [One clear sentence about the tenant's right under the law]
-#    - ⚠️ **Warning Found:** [One clear sentence about the problematic clause]
-#    - 🚨 **Predatory clause detected:** [One clear sentence if it's a predatory clause]
-
-# 3. Keep each point to ONE sentence. Be confident and direct. No fluff.
-
-# 4. Reference specific sections (e.g., "Section 12", "Clause 4.4(a)") when relevant.
-
-# 5. If no issues found, simply state: "Your agreement appears compliant with Lagos State Tenancy Law 2011."
-
-# IMPORTANT: For the same document, always identify the same clauses and provide the same analysis. Be consistent.
-
-# Please respond in {'Yoruba' if language == 'yo' else 'Hausa' if language == 'ha' else 'Igbo' if language == 'ig' else 'English'} if requested, otherwise use clear, simple English."""
-
-#     logger.debug(f"Legal analysis prompt (first 500 chars): {analysis_prompt[:500]}...")
-
-#     try:
-#         provider = "natlas"
-        
-#         if not settings.modal.llm_base_url:
-#             raise ValueError("N-ATLaS LLM base URL not configured. Please set MODAL__LLM_BASE_URL in .env")
-        
-#         answer_data = await generate_answer(
-#             query=analysis_prompt,
-#             contexts=unique_contexts,
-#             provider=provider,
-#         )
-
-#         analysis_text = answer_data["answer"]
-
-#         # Step 4: Parse structured response (simple parsing - can be improved)
-#         # For now, return the full analysis as-is
-#         # TODO: Implement structured parsing if needed
-
-#         return {
-#             "analysis": analysis_text,
-#             "flagged_clauses": [],  # Extracted via parsing if structured
-#             "risks": [],  # Extracted via parsing if structured
-#             "summary": "",  # Extracted via parsing if structured
-#             "recommendations": "",  # Extracted via parsing if structured
-#             "raw_analysis": analysis_text,
-#             "sources": [ctx.url for ctx in unique_contexts if ctx.url],
-#         }
-
-#     except Exception as e:
-#         logger.error(f"Error generating legal analysis: {e}")
-#         raise
-
-
 async def analyze_agreement_for_risks_stream(
     agreement_text: str,
     request,
@@ -180,8 +51,8 @@ async def analyze_agreement_for_risks_stream(
                 request=request,
                 query_text=query,
                 session_id=session_id,
-                feed_name="Lagos State Tenancy Law 2011",
-                feed_author="Lagos State",
+                document_title="Lagos State Tenancy Law 2011",
+                jurisdiction="Lagos State",
                 limit=2, 
             )
             if contexts is None:
