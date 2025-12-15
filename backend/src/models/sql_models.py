@@ -32,19 +32,12 @@ class LegalDocument(Base):
         index=True,
     )
 
-    # Legal Document fields (mapped from legacy article fields)
-    # feed_name → document_title (e.g., "Lagos State Tenancy Law 2011")
-    feed_name: Mapped[str] = mapped_column(String, nullable=False)
-    # feed_author → jurisdiction (e.g., "Lagos State")
-    feed_author: Mapped[str] = mapped_column(String, nullable=False)
-    # article_authors → document_type or empty list
-    article_authors: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
-    # title → section_title (for chunked sections)
-    title: Mapped[str] = mapped_column(String, nullable=False)
-    # url → document_id (unique identifier for the document)
-    url: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    # content → section/chunk content
-    content: Mapped[str] = mapped_column(Text, nullable=False)
-    # published_at → effective_date or issued_date
-    published_at: Mapped[str] = mapped_column(TIMESTAMP, nullable=False)
+    # Legal Document fields
+    document_title: Mapped[str] = mapped_column(String, nullable=False, comment="Document title (e.g., 'Lagos State Tenancy Law 2011')")
+    jurisdiction: Mapped[str] = mapped_column(String, nullable=False, comment="Jurisdiction (e.g., 'Lagos State')")
+    document_type: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False, comment="Document type or related metadata")
+    section_title: Mapped[str] = mapped_column(String, nullable=False, comment="Section title for chunked sections")
+    document_id: Mapped[str] = mapped_column(String, unique=True, nullable=False, comment="Unique identifier for the document")
+    content: Mapped[str] = mapped_column(Text, nullable=False, comment="Content of the document section/chunk")
+    effective_date: Mapped[str] = mapped_column(TIMESTAMP, nullable=False, comment="Effective date or issued date")
     created_at: Mapped[str] = mapped_column(TIMESTAMP, server_default=func.now(), nullable=False)
