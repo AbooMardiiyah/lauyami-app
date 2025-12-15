@@ -27,7 +27,7 @@
 
 <div align="center">
 
-[🌐 Live Demo](#live-demo) | [📽️ Demo Video](#demo-video) | [📈 Impact Metrics](#impact-metrics)
+[🌐 Live Demo](https://lauyami-71soez18w-hamzat-tiamiyus-projects.vercel.app/) | [📽️ Demo Video](#demo-video) | [📈 Impact Metrics](#impact-metrics)
 
 </div>
 
