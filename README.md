@@ -27,7 +27,7 @@
 
 <div align="center">
 
-[🌐 Live Demo](https://lauyami-71soez18w-hamzat-tiamiyus-projects.vercel.app/) | [📽️ Demo Video](#demo-video) | [📈 Impact Metrics](#impact-metrics)
+[🌐 Live Demo](#live-demo) | [📽️ Demo Video](#demo-video) | [📈 Impact Metrics](#impact-metrics)
 
 </div>
 
@@ -293,7 +293,7 @@ vercel
 
 ## Live Demo
 
-🌐 **[Try Lauyami Now](#)** - *Live demo link will be added here*
+🌐 **[Try Lauyami Now](https://lauyami-71soez18w-hamzat-tiamiyus-projects.vercel.app/)**
 
 Experience Lauyami's features:
 - Upload a tenancy agreement and get instant analysis
@@ -325,7 +325,7 @@ This project integrates several best-in-class services:
 
 ## Demo Video
 
-📽️ **[Watch Demo Video](#)** - *Demo video link will be added here*
+📽️ **[Watch Demo Video](#)** 
 
 **Demo Highlights:**
 - Document upload and analysis workflow
