@@ -8,7 +8,7 @@ from src.utils.logger_util import setup_logging
 logger = setup_logging()
 
 
-def delete_all_tables() -> None:
+def delete_all_tables(confirm: bool = False) -> None:
     """Drop all tables defined in the SQLAlchemy Base metadata from the Supabase Postgres database.
 
     This function initializes a SQLAlchemy engine, checks for existing tables, and drops them
@@ -17,7 +17,7 @@ def delete_all_tables() -> None:
     Errors during table deletion are logged and handled gracefully.
 
     Args:
-        None
+        confirm (bool): If True, skip interactive confirmation. Defaults to False.
 
     Returns:
         None
@@ -39,14 +39,19 @@ def delete_all_tables() -> None:
             logger.info("No tables found in the database. Nothing to delete.")
             return
 
-        # Prompt user for confirmation to prevent accidental data loss
-        confirm = input(
-            f"Are you sure you want to DROP ALL tables? {existing_tables}\n"
-            "Type 'YES' to confirm or any other key to cancel: "
-        )
-        if confirm != "YES":
-            logger.info("Operation canceled by user.")
-            return
+        # Prompt user for confirmation to prevent accidental data loss (unless confirm=True)
+        if not confirm:
+            try:
+                user_confirm = input(
+                    f"Are you sure you want to DROP ALL tables? {existing_tables}\n"
+                    "Type 'YES' to confirm or any other key to cancel: "
+                )
+                if user_confirm != "YES":
+                    logger.info("Operation canceled by user.")
+                    return
+            except EOFError:
+                logger.warning("No input available (non-interactive mode). Skipping confirmation.")
+                logger.info("Proceeding with table deletion...")
 
         # Drop all tables defined in Base.metadata
         logger.info(f"Dropping all tables: {existing_tables}")
