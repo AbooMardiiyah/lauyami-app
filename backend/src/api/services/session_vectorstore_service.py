@@ -130,11 +130,11 @@ class SessionVectorStore:
 
         for i, chunk in enumerate(chunks):
             payload = ArticleChunkPayload(
-                title=f"Section {i + 1}",
-                feed_name=f"Uploaded Agreement: {filename}",
-                feed_author="User Upload",
-                article_authors=["user_upload"],
-                url=f"{self.session_id}__chunk_{i}",
+                section_title=f"Section {i + 1}",
+                document_title=f"Uploaded Agreement: {filename}",
+                jurisdiction="User Upload",
+                document_type=["user_upload"],
+                document_id=f"{self.session_id}__chunk_{i}",
                 chunk_text=chunk,
             )
             all_payloads.append(payload)
@@ -218,11 +218,11 @@ class SessionVectorStore:
             payload = point.payload or {}
             results.append(
                 {
-                    "title": payload.get("title", ""),
-                    "feed_name": payload.get("feed_name"),
-                    "feed_author": payload.get("feed_author"),
-                    "article_authors": payload.get("article_authors"),
-                    "url": payload.get("url"),
+                    "section_title": payload.get("section_title", payload.get("title", "")),
+                    "document_title": payload.get("document_title", payload.get("feed_name")),
+                    "jurisdiction": payload.get("jurisdiction", payload.get("feed_author")),
+                    "document_type": payload.get("document_type", payload.get("article_authors", [])),
+                    "document_id": payload.get("document_id", payload.get("url")),
                     "chunk_text": payload.get("chunk_text"),
                     "score": point.score or 0.0,
                 }
