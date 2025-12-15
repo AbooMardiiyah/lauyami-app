@@ -66,11 +66,11 @@ def build_research_prompt(
     # Join all retrieved contexts into a readable format
     context_texts = "\n\n".join(
         (
-            f"- Feed Name: {r.feed_name}\n"
-            f"  Article Title: {r.title}\n"
-            f"  Article Author(s): {r.article_author}\n"
-            f"  Feed Author: {r.feed_author}\n"
-            f"  URL: {r.url}\n"
+            f"- Document Title: {r.document_title or 'N/A'}\n"
+            f"  Section Title: {r.section_title}\n"
+            f"  Document Type: {', '.join(r.document_type) if r.document_type else 'N/A'}\n"
+            f"  Jurisdiction: {r.jurisdiction or 'N/A'}\n"
+            f"  Document ID: {r.document_id or 'N/A'}\n"
             f"  Snippet: {r.chunk_text}"
         )
         for r in contexts
