@@ -22,9 +22,9 @@ async def test_search_unique_titles_route():
     and return unique titles.
     """
     payload = {
-        "query_text": "RAG",
-        "feed_author": None,
-        "feed_name": None,
+        "query_text": "tenant rights",
+        "jurisdiction": None,
+        "document_title": None,
         "title_keywords": None,
         "limit": 1,
     }
