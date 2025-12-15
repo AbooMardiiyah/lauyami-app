@@ -137,6 +137,17 @@ modal deploy natlas_serve.py
 modal deploy natlas_asr.py
 ```
 
+5. **Test with Sample Agreements**
+
+The repository includes 4 sample tenancy agreement PDFs in the `tenancy_agreements_to_test/` directory for testing purposes:
+
+- `test_agreement_1_multiple_violations.pdf` - Agreement with multiple legal violations
+- `test_agreement_2_upfront_payment.pdf` - Agreement with upfront payment issues
+- `test_agreement_3_excessive_charges.pdf` - Agreement with excessive charges
+- `test_agreement_4_structural_issues.pdf` - Agreement with structural problems
+
+**Important Note**: These are **simulated test documents** created for demonstration purposes. All names, locations, addresses, and other identifying information are **fictional and not real**. These documents are designed to showcase various types of legal issues that may appear in tenancy agreements and should only be used for testing the application's analysis capabilities.
+
 ### Deployment
 
 See [CLOUD_RUN_DEPLOYMENT_GUIDE.md](../CLOUD_RUN_DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
