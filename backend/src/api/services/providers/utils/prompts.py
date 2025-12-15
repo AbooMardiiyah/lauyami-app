@@ -35,13 +35,16 @@ that is retrieved from a vector database without relying on outside knowledge or
 """
 
 
-# Create a new prompt (only if opik is available)
+# Create a new prompt (only if opik is available and configured)
+prompt = None
 if OPIK_AVAILABLE:
-    prompt = opik.Prompt(
-        name="lauyami_legal_assistant", prompt=PROMPT, metadata={"environment": "development"}
-    )
-else:
-    prompt = None
+    try:
+        prompt = opik.Prompt(
+            name="lauyami_legal_assistant", prompt=PROMPT, metadata={"environment": "development"}
+        )
+    except Exception:
+        # opik is installed but not configured (no API key), continue without it
+        prompt = None
 
 
 def build_research_prompt(
