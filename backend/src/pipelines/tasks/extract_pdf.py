@@ -98,13 +98,13 @@ def create_document_items_from_pdf(
             return []
 
         document_item = ArticleItem(
-            feed_name=document_title,
-            feed_author=jurisdiction,
-            title=document_title,  
-            url=document_id,
+            document_title=document_title,
+            jurisdiction=jurisdiction,
+            section_title=document_title,  
+            document_id=document_id,
             content=content,
-            article_authors=[], 
-            published_at=effective_date,
+            document_type=[], 
+            effective_date=effective_date,
         )
 
         logger.info(
