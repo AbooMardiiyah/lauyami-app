@@ -683,29 +683,38 @@ const AppPage = () => {
             {activeView === "analysis" && (
               <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
                 {/* Analysis Header */}
-                <div className="gradient-hero px-6 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-primary-foreground" />
+                <div className="gradient-hero px-6 py-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-primary-foreground" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-primary-foreground">
+                          {documentFilename || "Tenancy Agreement"}
+                        </h3>
+                        <p className="text-sm text-primary-foreground/70">
+                          {isUploading ? "Analysis in progress..." : "Analysis complete"}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-foreground">
-                        {documentFilename || "Tenancy Agreement"}
-                      </h3>
-                      <p className="text-sm text-primary-foreground/70">
-                        Analysis in progress...
-                      </p>
+                    <div className="flex items-center gap-2">
+                      <LanguageSelector
+                        selectedLanguage={analysisLanguage}
+                        onLanguageChange={setAnalysisLanguage}
+                        size="sm"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleDeleteSession}
+                        className="text-primary-foreground/70 hover:text-primary-foreground"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete Session
+                      </Button>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleDeleteSession}
-                    className="text-primary-foreground/70 hover:text-primary-foreground"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete Session
-                  </Button>
                 </div>
 
                 {/* Analysis Content */}
