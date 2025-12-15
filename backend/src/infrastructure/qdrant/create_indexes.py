@@ -27,10 +27,10 @@ async def main() -> None:
     try:
         vectorstore = AsyncQdrantVectorStore()
         await vectorstore.enable_hnsw()
-        await vectorstore.create_title_index()
-        await vectorstore.create_article_authors_index()
-        await vectorstore.create_feed_author_index()
-        await vectorstore.create_article_feed_name_index()
+        await vectorstore.create_section_title_index()
+        await vectorstore.create_document_type_index()
+        await vectorstore.create_jurisdiction_index()
+        await vectorstore.create_document_title_index()
         logger.info("Qdrant indexes created successfully")
     except RuntimeError as e:
         logger.error(f"Failed to create Qdrant indexes: {e}")
