@@ -35,27 +35,27 @@ async def query_with_filters(
     request: Request,
     query_text: str = "",
     session_id: str | None = None,
-    feed_author: str | None = None,
-    feed_name: str | None = None,
+    jurisdiction: str | None = None,
+    document_title: str | None = None,
     title_keywords: str | None = None,
     limit: int = 5,
 ) -> list[SearchResult]:
     """Query the vector store with optional filters and return search results.
 
     Performs a hybrid dense + sparse search on Qdrant and applies filters based
-    on feed author, feed name, and title keywords. Results are deduplicated by point ID.
+    on jurisdiction, document title, and title keywords. Results are deduplicated by point ID.
 
     Args:
         request (Request): FastAPI request object containing the vector store in app.state.
         query_text (str): Text query to search for.
-        feed_author (str | None): Optional filter for the feed author.
-        feed_name (str | None): Optional filter for the feed name.
+        jurisdiction (str | None): Optional filter for the jurisdiction.
+        document_title (str | None): Optional filter for the document title.
         title_keywords (str | None): Optional filter for title keywords.
         limit (int): Maximum number of results to return.
 
     Returns:
         list[SearchResult]:
-            List of search results containing title, feed info, URL, chunk text, and score.
+            List of search results containing section_title, jurisdiction, document_title, document_id, chunk text, and score.
 
     """
     session_results: list[SearchResult] = []
@@ -73,13 +73,13 @@ async def query_with_filters(
             for chunk in session_chunks:
                 session_results.append(
                     SearchResult(
-                        title=chunk["title"],
-                        feed_author=chunk["feed_author"],
-                        feed_name=chunk["feed_name"],
-                        article_author=chunk["article_authors"],
-                        url=chunk["url"],
-                        chunk_text=chunk["chunk_text"],
-                        score=chunk["score"],
+                        section_title=chunk.get("section_title", chunk.get("title", "")),
+                        jurisdiction=chunk.get("jurisdiction", chunk.get("feed_author")),
+                        document_title=chunk.get("document_title", chunk.get("feed_name")),
+                        document_type=chunk.get("document_type", chunk.get("article_authors", [])),
+                        document_id=chunk.get("document_id", chunk.get("url")),
+                        chunk_text=chunk.get("chunk_text"),
+                        score=chunk.get("score", 0.0),
                     )
                 )
             
@@ -92,13 +92,13 @@ async def query_with_filters(
     sparse_vector = vectorstore.sparse_vectors([query_text])[0]
 
     conditions: list[FieldCondition] = []
-    if feed_author:
-        conditions.append(FieldCondition(key="feed_author", match=MatchValue(value=feed_author)))
-    if feed_name:
-        conditions.append(FieldCondition(key="feed_name", match=MatchValue(value=feed_name)))
+    if jurisdiction:
+        conditions.append(FieldCondition(key="jurisdiction", match=MatchValue(value=jurisdiction)))
+    if document_title:
+        conditions.append(FieldCondition(key="document_title", match=MatchValue(value=document_title)))
     if title_keywords:
         conditions.append(
-            FieldCondition(key="title", match=MatchText(text=title_keywords.strip().lower()))
+            FieldCondition(key="section_title", match=MatchText(text=title_keywords.strip().lower()))
         )
 
     query_filter = Filter(must=conditions) if conditions else None  # type: ignore
@@ -130,11 +130,11 @@ async def query_with_filters(
             payload = point.payload or {}
             results.append(
                 SearchResult(
-                    title=payload.get("title", ""),
-                    feed_author=payload.get("feed_author"),
-                    feed_name=payload.get("feed_name"),
-                    article_author=payload.get("article_authors"),
-                    url=payload.get("url"),
+                    section_title=payload.get("section_title", payload.get("title", "")),
+                    jurisdiction=payload.get("jurisdiction", payload.get("feed_author")),
+                    document_title=payload.get("document_title", payload.get("feed_name")),
+                    document_type=payload.get("document_type", payload.get("article_authors", [])),
+                    document_id=payload.get("document_id", payload.get("url")),
                     chunk_text=payload.get("chunk_text"),
                     score=point.score,
                 )
@@ -144,11 +144,11 @@ async def query_with_filters(
     
     combined_results = session_results + results
     
-    seen_urls = set()
+    seen_document_ids = set()
     final_results = []
     for result in combined_results:
-        if result.url and result.url not in seen_urls:
-            seen_urls.add(result.url)
+        if result.document_id and result.document_id not in seen_document_ids:
+            seen_document_ids.add(result.document_id)
             final_results.append(result)
     
     final_results.sort(key=lambda x: x.score or 0.0, reverse=True)
@@ -167,28 +167,28 @@ async def query_with_filters(
 async def query_unique_titles(
     request: Request,
     query_text: str,
-    feed_author: str | None = None,
-    feed_name: str | None = None,
+    jurisdiction: str | None = None,
+    document_title: str | None = None,
     title_keywords: str | None = None,
     limit: int = 5,
 ) -> list[SearchResult]:
-    """Query the vector store and return only unique titles.
+    """Query the vector store and return only unique section titles.
 
     Performs a hybrid dense + sparse search with optional filters and dynamically
     increases the fetch limit to account for duplicates. Deduplicates results
-    by article title.
+    by section title.
 
     Args:
         request (Request): FastAPI request object containing the vector store in app.state.
         query_text (str): Text query to search for.
-        feed_author (str | None): Optional filter for the feed author.
-        feed_name (str | None): Optional filter for the feed name.
+        jurisdiction (str | None): Optional filter for the jurisdiction.
+        document_title (str | None): Optional filter for the document title.
         title_keywords (str | None): Optional filter for title keywords.
         limit (int): Maximum number of unique results to return.
 
     Returns:
         list[SearchResult]:
-            List of unique search results containing title, feed info, URL, chunk text, and score.
+            List of unique search results containing section_title, jurisdiction, document_title, document_id, chunk text, and score.
 
     """
     vectorstore: AsyncQdrantVectorStore = request.app.state.vectorstore
@@ -197,13 +197,13 @@ async def query_unique_titles(
 
     # Build filter conditions
     conditions: list[FieldCondition] = []
-    if feed_author:
-        conditions.append(FieldCondition(key="feed_author", match=MatchValue(value=feed_author)))
-    if feed_name:
-        conditions.append(FieldCondition(key="feed_name", match=MatchValue(value=feed_name)))
+    if jurisdiction:
+        conditions.append(FieldCondition(key="jurisdiction", match=MatchValue(value=jurisdiction)))
+    if document_title:
+        conditions.append(FieldCondition(key="document_title", match=MatchValue(value=document_title)))
     if title_keywords:
         conditions.append(
-            FieldCondition(key="title", match=MatchText(text=title_keywords.strip().lower()))
+            FieldCondition(key="section_title", match=MatchText(text=title_keywords.strip().lower()))
         )
 
     query_filter = Filter(must=conditions) if conditions else None  # type: ignore
@@ -226,23 +226,23 @@ async def query_unique_titles(
         logger.warning(f"Error querying reference law collection: {e}")
         response = None
 
-    # Deduplicate by title
+    # Deduplicate by section title
     seen_titles: set[str] = set()
     results: list[SearchResult] = []
     if response and hasattr(response, "points") and response.points:
         for point in response.points:
             payload = point.payload or {}
-            title = payload.get("title")
+            title = payload.get("section_title", payload.get("title"))
             if not title or title in seen_titles:
                 continue
             seen_titles.add(title)
             results.append(
                 SearchResult(
-                    title=title,
-                    feed_author=payload.get("feed_author"),
-                    feed_name=payload.get("feed_name"),
-                    article_author=payload.get("article_authors"),
-                    url=payload.get("url"),
+                    section_title=title,
+                    jurisdiction=payload.get("jurisdiction", payload.get("feed_author")),
+                    document_title=payload.get("document_title", payload.get("feed_name")),
+                    document_type=payload.get("document_type", payload.get("article_authors", [])),
+                    document_id=payload.get("document_id", payload.get("url")),
                     chunk_text=payload.get("chunk_text"),
                     score=point.score,
                 )
