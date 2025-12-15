@@ -233,8 +233,8 @@ class AsyncQdrantVectorStore:
     # -----------------------
     # Indexes
     # -----------------------
-    async def create_feed_author_index(self) -> None:
-        """Create keyword index for feed_author field.
+    async def create_jurisdiction_index(self) -> None:
+        """Create keyword index for jurisdiction field.
 
         Returns:
             None
@@ -245,19 +245,19 @@ class AsyncQdrantVectorStore:
 
         """
         try:
-            self.logger.info(f"Creating feed_author index for '{self.collection_name}'")
+            self.logger.info(f"Creating jurisdiction index for '{self.collection_name}'")
             await self.client.create_payload_index(
                 collection_name=self.collection_name,
-                field_name="feed_author",
+                field_name="jurisdiction",
                 field_schema=models.KeywordIndexParams(type=models.KeywordIndexType.KEYWORD),
             )
-            self.logger.info(f"feed_author index created for '{self.collection_name}'")
+            self.logger.info(f"jurisdiction index created for '{self.collection_name}'")
         except Exception as e:
-            self.logger.error(f"Failed to create feed_author index: {e}")
-            raise RuntimeError("Error creating feed_author index") from e
+            self.logger.error(f"Failed to create jurisdiction index: {e}")
+            raise RuntimeError("Error creating jurisdiction index") from e
 
-    async def create_article_authors_index(self) -> None:
-        """Create keyword index for article_authors field.
+    async def create_document_type_index(self) -> None:
+        """Create keyword index for document_type field.
 
         Returns:
             None
@@ -268,19 +268,19 @@ class AsyncQdrantVectorStore:
 
         """
         try:
-            self.logger.info(f"Creating article_authors index for '{self.collection_name}'")
+            self.logger.info(f"Creating document_type index for '{self.collection_name}'")
             await self.client.create_payload_index(
                 collection_name=self.collection_name,
-                field_name="article_authors",
+                field_name="document_type",
                 field_schema=models.KeywordIndexParams(type=models.KeywordIndexType.KEYWORD),
             )
-            self.logger.info(f"article_authors index created for '{self.collection_name}'")
+            self.logger.info(f"document_type index created for '{self.collection_name}'")
         except Exception as e:
-            self.logger.error(f"Failed to create article_authors index: {e}")
-            raise RuntimeError("Error creating article_authors index") from e
+            self.logger.error(f"Failed to create document_type index: {e}")
+            raise RuntimeError("Error creating document_type index") from e
 
-    async def create_article_feed_name_index(self) -> None:
-        """Create keyword index for feed_name field.
+    async def create_document_title_index(self) -> None:
+        """Create keyword index for document_title field.
 
         Returns:
             None
@@ -291,19 +291,19 @@ class AsyncQdrantVectorStore:
 
         """
         try:
-            self.logger.info(f"Creating feed_name index for '{self.collection_name}'")
+            self.logger.info(f"Creating document_title index for '{self.collection_name}'")
             await self.client.create_payload_index(
                 collection_name=self.collection_name,
-                field_name="feed_name",
+                field_name="document_title",
                 field_schema=models.KeywordIndexParams(type=models.KeywordIndexType.KEYWORD),
             )
-            self.logger.info(f"feed_name index created for '{self.collection_name}'")
+            self.logger.info(f"document_title index created for '{self.collection_name}'")
         except Exception as e:
-            self.logger.error(f"Failed to create feed_name index: {e}")
-            raise RuntimeError("Error creating feed_name index") from e
+            self.logger.error(f"Failed to create document_title index: {e}")
+            raise RuntimeError("Error creating document_title index") from e
 
-    async def create_title_index(self) -> None:
-        """Create text index for title field with Snowball stemmer.
+    async def create_section_title_index(self) -> None:
+        """Create text index for section_title field with Snowball stemmer.
 
         Returns:
             None
@@ -314,10 +314,10 @@ class AsyncQdrantVectorStore:
 
         """
         try:
-            self.logger.info(f"Creating title index for '{self.collection_name}'")
+            self.logger.info(f"Creating section_title index for '{self.collection_name}'")
             await self.client.create_payload_index(
                 collection_name=self.collection_name,
-                field_name="title",
+                field_name="section_title",
                 field_schema=TextIndexParams(
                     type=TextIndexType.TEXT,
                     tokenizer=TokenizerType.WORD,
@@ -329,7 +329,7 @@ class AsyncQdrantVectorStore:
                     ),
                 ),
             )
-            self.logger.info(f"title index created for '{self.collection_name}'")
+            self.logger.info(f"section_title index created for '{self.collection_name}'")
         except Exception as e:
             self.logger.error(f"Failed to create title index: {e}")
             raise RuntimeError("Error creating title index") from e
@@ -519,9 +519,9 @@ class AsyncQdrantVectorStore:
         try:
             offset = 0
             while True:
-                query = session.query(LegalDocument).order_by(LegalDocument.published_at)
+                query = session.query(LegalDocument).order_by(LegalDocument.effective_date)
                 if from_date:
-                    query = query.filter(LegalDocument.published_at >= from_date)
+                    query = query.filter(LegalDocument.effective_date >= from_date)
                 documents = query.offset(offset).limit(self.document_batch_size).all()
                 if not documents:
                     break
@@ -568,19 +568,19 @@ class AsyncQdrantVectorStore:
                     ids = [
                         str(
                             uuid.UUID(
-                                hashlib.sha256(f"{document.url}_{chunk}".encode()).hexdigest()[:32]
+                                hashlib.sha256(f"{document.document_id}_{chunk}".encode()).hexdigest()[:32]
                             )
                         )
                         for chunk in chunks
                     ]
                     payloads = [
                         ArticleChunkPayload(
-                            feed_name=document.feed_name,
-                            feed_author=document.feed_author,
-                            article_authors=document.article_authors,
-                            title=document.title,
-                            url=document.url,
-                            published_at=str(document.published_at),
+                            document_title=document.document_title,
+                            jurisdiction=document.jurisdiction,
+                            document_type=document.document_type,
+                            section_title=document.section_title,
+                            document_id=document.document_id,
+                            effective_date=str(document.effective_date),
                             created_at=str(document.created_at),
                             chunk_index=i,
                             chunk_text=chunk,
@@ -603,7 +603,7 @@ class AsyncQdrantVectorStore:
                     ]
 
                     self.logger.info(
-                        f"Document '{document.title}': total chunks = {len(chunks)}, "
+                        f"Document '{document.document_title}': total chunks = {len(chunks)}, "
                         f"existing chunks = {len(existing_ids)}, new chunks = {len(new_chunks)}"
                     )
 
