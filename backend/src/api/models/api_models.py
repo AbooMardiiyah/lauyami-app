@@ -2,20 +2,12 @@ from pydantic import BaseModel, Field
 
 
 class SearchResult(BaseModel):
-    """Search result for legal document chunks.
-    
-    Field names kept for backward compatibility:
-    - title → section_title (for chunked sections)
-    - feed_author → jurisdiction (e.g., "Lagos State")
-    - feed_name → document_title (e.g., "Lagos State Tenancy Law 2011")
-    - article_author → document_type or empty list
-    - url → document_id (unique identifier for the document)
-    """
-    title: str = Field(default="", description="Section title of the document chunk")
-    feed_author: str | None = Field(default=None, description="Jurisdiction (e.g., 'Lagos State')")
-    feed_name: str | None = Field(default=None, description="Document title (e.g., 'Lagos State Tenancy Law 2011')")
-    article_author: list[str] | None = Field(default=None, description="Document type or related metadata")
-    url: str | None = Field(default=None, description="Document ID (unique identifier for the document)")
+    """Search result for legal document chunks."""
+    section_title: str = Field(default="", description="Section title of the document chunk")
+    jurisdiction: str | None = Field(default=None, description="Jurisdiction (e.g., 'Lagos State')")
+    document_title: str | None = Field(default=None, description="Document title (e.g., 'Lagos State Tenancy Law 2011')")
+    document_type: list[str] | None = Field(default=None, description="Document type or related metadata")
+    document_id: str | None = Field(default=None, description="Document ID (unique identifier for the document)")
     chunk_text: str | None = Field(default=None, description="Text content of the document chunk")
     score: float = Field(default=0.0, description="Relevance score of the document chunk")
 
@@ -23,9 +15,9 @@ class SearchResult(BaseModel):
 class UniqueTitleRequest(BaseModel):
     """Request model for unique document section titles search."""
     query_text: str = Field(default="", description="The user query text")
-    feed_author: str | None = Field(default=None, description="Filter by jurisdiction (e.g., 'Lagos State')")
-    feed_name: str | None = Field(default=None, description="Filter by document title")
-    article_author: list[str] | None = Field(default=None, description="Filter by document type")
+    jurisdiction: str | None = Field(default=None, description="Filter by jurisdiction (e.g., 'Lagos State')")
+    document_title: str | None = Field(default=None, description="Filter by document title")
+    document_type: list[str] | None = Field(default=None, description="Filter by document type")
     title_keywords: str | None = Field(
         default=None, description="Keywords or phrase to match in section title"
     )
@@ -44,9 +36,9 @@ class AskRequest(BaseModel):
     session_id: str | None = Field(
         default=None, description="Session ID to query against uploaded document. If provided, searches both uploaded document and reference law."
     )
-    feed_author: str | None = Field(default=None, description="Filter by jurisdiction (e.g., 'Lagos State')")
-    feed_name: str | None = Field(default=None, description="Filter by document title")
-    article_author: list[str] | None = Field(default=None, description="Filter by document type")
+    jurisdiction: str | None = Field(default=None, description="Filter by jurisdiction (e.g., 'Lagos State')")
+    document_title: str | None = Field(default=None, description="Filter by document title")
+    document_type: list[str] | None = Field(default=None, description="Filter by document type")
     title_keywords: str | None = Field(
         default=None, description="Keywords or phrase to match in section title"
     )
