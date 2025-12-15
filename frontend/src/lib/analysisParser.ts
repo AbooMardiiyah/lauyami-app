@@ -38,7 +38,8 @@ export function parseAnalysisText(text: string): ParsedSection[] {
     } else if (part.match(/🚨\s*Predatory [Cc]lause/)) {
       currentType = 'predatory';
       continue;
- 
+    }
+
     const content = part.trim();
     
     if (content.length < 10 || content.toLowerCase().includes('starting analysis')) {
