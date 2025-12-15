@@ -26,3 +26,4 @@ dist-ssr
 # Backend (separate project - deployed independently)
 ../backend/
 backend/
+.vercel
