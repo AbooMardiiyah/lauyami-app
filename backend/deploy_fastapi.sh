@@ -21,7 +21,7 @@ set +o allexport
 
 echo "✅ Environment variables loaded."
 
-PROJECT_ID="lauyami-project"
+PROJECT_ID="lauyami-app"
 SERVICE_NAME="lauyami-backend"
 REGION="europe-west6" #europe-west1 "europe-west6"
 IMAGE_NAME="gcr.io/$PROJECT_ID/$SERVICE_NAME"
