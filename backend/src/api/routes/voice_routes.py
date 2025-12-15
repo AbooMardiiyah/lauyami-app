@@ -62,8 +62,8 @@ async def ask_with_voice(
             request=request,
             query_text=transcribed_text,
             session_id=session_id,
-            feed_name="Lagos State Tenancy Law 2011",
-            feed_author="Lagos State",
+            document_title="Lagos State Tenancy Law 2011",
+            jurisdiction="Lagos State",
             limit=limit,
         )
 
