@@ -58,6 +58,14 @@ export async function generatePDFReport(
 
   const sections = parseAnalysisText(analysisText);
   
+  // If no sections were parsed, add the raw text as a text section
+  if (sections.length === 0) {
+    sections.push({
+      type: 'text',
+      content: analysisText
+    });
+  }
+  
   for (const section of sections) {
     checkPageBreak(20);
 
