@@ -98,15 +98,12 @@ async def qdrant_ingest_flow(from_date: str | None = None) -> None:
         if from_date:
             from_date_dt = parser.parse(from_date).replace(tzinfo=UTC)
             logger.info(f"Using user-provided from_date: {from_date_dt}")
+            await ingest_qdrant(from_date=from_date_dt)
         else:
-            last_run_date = await get_last_successful_run("qdrant_ingest_flow")
-            from_date_dt = (
-                last_run_date
-                or (datetime.now(UTC) - timedelta(days=30))
-            )
-            logger.info(f"Using fallback from_date: {from_date_dt}")
-
-        await ingest_qdrant(from_date=from_date_dt)
+            # If from_date is None and we want to ingest all, pass None to ingest_qdrant
+            # This will skip the date filter
+            logger.info("No from_date provided - ingesting all documents")
+            await ingest_qdrant(from_date=None)
 
     except Exception as e:
         logger.error(f"Error during Qdrant ingestion flow: {e}")
