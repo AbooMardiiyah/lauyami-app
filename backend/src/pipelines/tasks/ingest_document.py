@@ -49,10 +49,10 @@ def ingest_documents(
     try:
         for i, document in enumerate(document_items, start=1):
             if skip_existing:
-                existing = session.query(document_model).filter_by(url=document.url).first()
+                existing = session.query(document_model).filter_by(document_id=document.document_id).first()
                 if existing:
                     logger.debug(
-                        f"Document '{document.feed_name}' (ID: {document.url}) already exists, skipping"
+                        f"Document '{document.document_title}' (ID: {document.document_id}) already exists, skipping"
                     )
                     skipped_count += 1
                     continue
@@ -110,13 +110,13 @@ def _persist_batch(
     """Helper to bulk insert a batch of ArticleItems (legal documents)."""
     rows = [
         document_model(
-            feed_name=document.feed_name,
-            feed_author=document.feed_author,
-            title=document.title,
-            url=document.url,
+            document_title=document.document_title,
+            jurisdiction=document.jurisdiction,
+            section_title=document.section_title,
+            document_id=document.document_id,
             content=document.content,
-            article_authors=document.article_authors,
-            published_at=document.published_at,
+            document_type=document.document_type,
+            effective_date=document.effective_date,
         )
         for document in batch
     ]
