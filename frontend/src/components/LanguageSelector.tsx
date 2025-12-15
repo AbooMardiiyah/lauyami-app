@@ -42,10 +42,10 @@ export function LanguageSelector({
         <Button
           variant="outline"
           size={size}
-          className="gap-2"
+          className="gap-2 bg-background hover:bg-muted border-2 border-foreground/20 hover:border-foreground/40 font-semibold text-foreground shadow-sm"
         >
           <Globe className="w-4 h-4" />
-          <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
+          <span className="font-medium">Select your language</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
