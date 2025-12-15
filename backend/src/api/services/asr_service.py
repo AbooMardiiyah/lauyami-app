@@ -74,7 +74,7 @@ async def transcribe_audio(
 
     try:
         request_start = time.time()
-        async with httpx.AsyncClient(timeout=180.0) as client:
+        async with httpx.AsyncClient(timeout=180.0, follow_redirects=True) as client:
             response = await client.post(
                 modal_settings.asr_base_url,
                 json=payload,
