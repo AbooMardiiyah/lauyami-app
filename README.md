@@ -35,14 +35,24 @@
 
 - [Lauyami Legal Assistant](#lauyami-legal-assistant)
   - [Table of Contents](#table-of-contents)
-  - [Quick Links](#quick-links)
   - [About Lauyami](#about-lauyami)
   - [Market Opportunity](#market-opportunity)
-  - [Business Model](#business-model)
+    - [Problem Statement](#problem-statement)
+    - [Market Size](#market-size)
+    - [Competitive Advantage](#competitive-advantage)
+  - [Business Model ( In Review)](#business-model--in-review)
+    - [Revenue Streams](#revenue-streams)
+    - [Growth Strategy](#growth-strategy)
   - [Who Is This For?](#who-is-this-for)
   - [Key Features](#key-features)
   - [Innovation \& Differentiation](#innovation--differentiation)
+    - [What Makes Lauyami Unique?](#what-makes-lauyami-unique)
+    - [Technical Innovation](#technical-innovation)
   - [Impact Metrics](#impact-metrics)
+    - [Target Impact (Year 1)](#target-impact-year-1)
+    - [Social Impact Goals](#social-impact-goals)
+    - [Measurable Outcomes](#measurable-outcomes)
+    - [Long-term Vision (3-5 Years)](#long-term-vision-3-5-years)
   - [Prerequisites](#prerequisites)
   - [Technology Stack](#technology-stack)
   - [Getting Started](#getting-started)
@@ -68,15 +78,15 @@ Lauyami is an AI-powered legal assistant that helps tenants and landlords unders
 
 ### Problem Statement
 Nigeria's rental market faces significant challenges:
-- **High illiteracy rates** (38% in 2022) make legal documents inaccessible
+- **[High illiteracy rates](https://www.worldviewdata.com/countries/nigeria/literacy-rate)** (29.6% in 2024) make legal documents inaccessible
 - **Language barriers** prevent understanding of English-only legal documents
 - **Predatory clauses** are common in tenancy agreements
 - **Limited access to legal counsel** due to cost and availability
-- **Lagos alone** has over 20 million residents, with millions in rental agreements
+- **[Lagos alone](https://lagosstate.gov.ng/)** has over 20 million residents, with millions in rental agreements
 
 ### Market Size
-- **Lagos State**: ~20 million residents, ~60% in rental accommodation = **12 million potential users**
-- **Nigeria-wide**: ~220 million population, growing urban rental market
+- **[Lagos State](https://lekkigardens.com/lagos-rent-surge-2025-why-the-citys-housing-costs-keep-soaring-and-what-smart-homebuyers-are-doing-about-it/)**: ~ million residents, ~70% in rental accommodation = **12 million potential users**
+- **[Nigeria-wide](https://www.worldometers.info/world-population/nigeria-population/)**: ~240 million population, growing urban rental market
 - **Target segments**: Tenants (70%), Landlords (20%), Legal professionals (10%)
 
 ### Competitive Advantage
@@ -86,7 +96,7 @@ Nigeria's rental market faces significant challenges:
 - **Free tier** for basic analysis (vs. expensive legal consultations)
 - **Real-time analysis** vs. days/weeks for traditional legal review
 
-## Business Model
+## Business Model ( In Review)
 
 ### Revenue Streams
 
@@ -96,7 +106,7 @@ Nigeria's rental market faces significant challenges:
 
 2. **B2B Licensing**
    - Property management companies: Bulk analysis for multiple agreements
-   - Real estate platforms: API integration (₦50,000-200,000/month)
+   - Real estate platforms: API integration (₦30,000-50,000/month)
 
 3. **Legal Professional Tools**
    - Law firms: Advanced analysis, bulk processing (₦10,000-50,000/month)
@@ -107,10 +117,10 @@ Nigeria's rental market faces significant challenges:
    - Consumer protection agencies: Agreement validation service
 
 ### Growth Strategy
-- **Phase 1** (Months 1-3): Lagos State focus, user acquisition
-- **Phase 2** (Months 4-6): Expand to Abuja, Port Harcourt, Ibadan
-- **Phase 3** (Months 7-12): Nigeria-wide coverage, additional document types
-- **Phase 4** (Year 2+): Expand to other legal domains (employment, contracts)
+- **Phase 1** : Lagos State focus, user acquisition
+- **Phase 2** : Expand to Abuja, Port Harcourt, Ibadan
+- **Phase 3** : Nigeria-wide coverage, additional document types
+- **Phase 4** : Expand to other legal domains (tenement rate tax agreements, contracts, house allocation letter etc.)
 
 ## Who Is This For?
 
@@ -152,8 +162,6 @@ Nigeria's rental market faces significant challenges:
 3. **Multilingual RAG**: RAG system that works across 4 languages seamlessly
 4. **Streaming Architecture**: Real-time analysis reduces perceived latency
 5. **Session-Based Context**: Maintains conversation context for uploaded documents
-
-![Lauyami UI](static/gradio_app.png)
 
 ## Impact Metrics
 
