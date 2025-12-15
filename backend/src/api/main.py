@@ -85,9 +85,37 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Lauya-mi Legal Assistant API",
     version="2.0",
-    description="AI-powered legal assistant for analyzing tenancy agreements using Lagos State Tenancy Law 2011. Supports voice queries in Yoruba, Hausa, Igbo, and Nigerian Accented English.",
+    description="""
+    AI-powered legal assistant for analyzing tenancy agreements and answering legal questions.
+    
+    ## Features
+    
+    * **Document Analysis**: Upload tenancy agreements (PDF/images) and get AI-powered risk analysis
+    * **Multi-language Support**: Query in Yoruba, Hausa, Igbo, or Nigerian Accented English
+    * **Voice Queries**: Ask questions using voice with automatic speech recognition (ASR)
+    * **RAG-powered Search**: Hybrid dense + sparse vector search over Lagos State Tenancy Law 2011
+    * **Streaming Responses**: Real-time streaming for faster user experience
+    
+    ## Technology Stack
+    
+    * **LLM**: N-ATLaS (Nigerian-accented LLM)
+    * **Vector Database**: Qdrant (hybrid search with BM25 + embeddings)
+    * **Database**: Supabase PostgreSQL
+    * **ASR**: N-ATLaS speech recognition models
+    
+    ## API Endpoints
+    
+    * `/search/unique-titles` - Search for unique document sections
+    * `/search/ask/stream` - Ask questions and get streaming answers
+    * `/agreement/upload-agreement/stream` - Upload and analyze agreements
+    * `/voice/ask-with-voice` - Voice-based question answering
+    * `/tts/synthesize` - Text-to-speech synthesis
+    * `/report/generate` - Generate PDF analysis reports
+    """,
     lifespan=lifespan,
-    # root_path=root_path,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
 
 
