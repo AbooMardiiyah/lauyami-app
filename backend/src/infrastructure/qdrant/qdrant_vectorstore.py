@@ -93,10 +93,9 @@ class AsyncQdrantVectorStore:
         self.log_batch_status = partial(log_batch_status, self.logger)
 
         # -------------------------------
-        # Jina settings (optional)
+        # Jina settings (removed)
         # -------------------------------
-        self.jina_settings = settings.jina
-        self.use_jina = False  # Set to True to enable Jina integration
+        self.use_jina = False  # Jina integration removed
 
         # -------------------------------
         # Hugging Face settings (optional)
@@ -349,31 +348,10 @@ class AsyncQdrantVectorStore:
             list[list[float]]: List of dense vector embeddings.
 
         Raises:
-            requests.RequestException: If the Jina API request fails.
+            NotImplementedError: Jina integration has been removed.
 
         """
-        try:
-            url = getattr(self, "jina_url", f"{self.jina_settings.url}")
-            headers = getattr(
-                self,
-                "jina_headers",
-                {
-                    "Content-Type": "application/json",
-                    "Authorization": f"Bearer {self.jina_settings.api_key}",
-                },
-            )
-            data = {
-                "model": f"{self.jina_settings.model}",
-                "task": "retrieval.passage",
-                "dimensions": self.embedding_size,
-                "input": texts,
-            }
-            response = requests.post(url, headers=headers, json=data)
-            response.raise_for_status()
-            return [item["embedding"] for item in response.json().get("data", [])]
-        except requests.RequestException as e:
-            self.logger.error(f"Jina API request failed: {e}")
-            raise
+        raise NotImplementedError("Jina integration has been removed")
 
     def hf_dense_vectors(self, texts: list[str]) -> list[list[float]]:
         """Generate dense vectors using Hugging Face Inference API.

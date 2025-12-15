@@ -100,17 +100,17 @@ docker-build: ## Build Docker image for backend
 	docker build -t lauyami-backend:latest .
 	@echo "Docker image built successfully!"
 
-docker-run: ## Run Docker container (port 8080, requires .env file)
-	@echo "Starting Docker container on port 8080..."
-	@echo "API will be available at http://localhost:8080"
-	@echo "Health check: http://localhost:8080/health"
+docker-run: ## Run Docker container (port 8000, requires .env file)
+	@echo "Starting Docker container on port 8000..."
+	@echo "API will be available at http://localhost:8000"
+	@echo "Health check: http://localhost:8000/health"
 	@echo "Note: Requires .env file with Qdrant and other API keys"
 	@echo "Press Ctrl+C to stop"
-	docker run --rm -p 8080:8080 --env-file .env lauyami-backend:latest
+	docker run --rm -p 8000:8000 --env-file .env lauyami-backend:latest
 
 docker-run-detached: ## Run Docker container in background
-	@echo "Starting Docker container in background on port 8080..."
-	docker run -d -p 8080:8080 --name lauyami-backend --env-file .env lauyami-backend:latest
+	@echo "Starting Docker container in background on port 8000..."
+	docker run -d -p 8000:8000 --name lauyami-backend --env-file .env lauyami-backend:latest
 	@echo "Container running. Use 'make docker-stop' to stop it."
 
 docker-stop: ## Stop running Docker container(s)
@@ -130,18 +130,18 @@ docker-test: ## Test Docker image (import check)
 docker-health: ## Test health endpoint (requires .env file with Qdrant config)
 	@echo "Testing health endpoint..."
 	@echo "Note: This requires .env file with Qdrant connection details"
-	@docker run --rm -d -p 8081:8080 --env-file .env --name lauyami-backend-test lauyami-backend:latest || (docker stop lauyami-backend-test 2>/dev/null; docker rm lauyami-backend-test 2>/dev/null; docker run --rm -d -p 8081:8080 --env-file .env --name lauyami-backend-test lauyami-backend:latest)
+	@docker run --rm -d -p 8001:8000 --env-file .env --name lauyami-backend-test lauyami-backend:latest || (docker stop lauyami-backend-test 2>/dev/null; docker rm lauyami-backend-test 2>/dev/null; docker run --rm -d -p 8001:8000 --env-file .env --name lauyami-backend-test lauyami-backend:latest)
 	@echo "Waiting for container to start (this may take 60+ seconds on first run to download models)..."
 	@for i in 1 2 3 4 5 6 7 8 9 10 11 12; do \
 		sleep 5; \
-		if curl -s -f http://localhost:8081/health > /dev/null 2>&1; then \
+		if curl -s -f http://localhost:8001/health > /dev/null 2>&1; then \
 			echo "Container is ready!"; \
 			break; \
 		fi; \
 		echo "Still waiting... ($$((i * 5))s)"; \
 	done
-	@echo "Testing health endpoint at http://localhost:8081/health..."
-	@curl -s -f http://localhost:8081/health && echo "" && echo "✅ Health check passed!" || (echo "❌ Health check failed"; echo "Container logs:"; docker logs lauyami-backend-test 2>&1 | tail -30)
+	@echo "Testing health endpoint at http://localhost:8001/health..."
+	@curl -s -f http://localhost:8001/health && echo "" && echo "✅ Health check passed!" || (echo "❌ Health check failed"; echo "Container logs:"; docker logs lauyami-backend-test 2>&1 | tail -30)
 	@docker stop lauyami-backend-test 2>/dev/null || true
 	@docker rm lauyami-backend-test 2>/dev/null || true
 	@echo "Health check complete."

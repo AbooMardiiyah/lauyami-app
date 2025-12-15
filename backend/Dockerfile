@@ -48,7 +48,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONPATH=/app
 ENV HF_HOME=/tmp/huggingface
 ENV FASTEMBED_CACHE=/tmp/fastembed_cache
-ENV PORT=8080
+ENV PORT=8000
 
 # Create cache directories
 RUN mkdir -p $HF_HOME $FASTEMBED_CACHE && chmod -R 755 $HF_HOME $FASTEMBED_CACHE
@@ -56,9 +56,9 @@ RUN mkdir -p $HF_HOME $FASTEMBED_CACHE && chmod -R 755 $HF_HOME $FASTEMBED_CACHE
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:$PORT/health || exit 1
 
-# Expose Cloud Run port
+# Expose backend port (8000)
 EXPOSE $PORT
 
 # Run FastAPI with uvicorn
-# Use PORT env var (Cloud Run sets this) or default to 8080
-CMD uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT:-8080} --workers 1 --loop uvloop
+# Use PORT env var (Cloud Run sets this) or default to 8000
+CMD uvicorn src.api.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1 --loop uvloop

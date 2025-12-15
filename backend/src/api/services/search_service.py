@@ -250,7 +250,8 @@ async def query_unique_titles(
             if len(results) >= limit:
                 break
 
-    logger.info(f"Returning {len(results)} unique title results for matching query '{query_text}'")
+    # Sanitized log to prevent exposing user queries
+    logger.info(f"Returning {len(results)} unique title results for query (length: {len(query_text)} chars)")
 
     # logger.info(f"results: {results}")
     return results

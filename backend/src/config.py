@@ -90,15 +90,6 @@ class TextSplitterSettings(BaseModel):
 
 
 # -----------------------------
-# Jina Settings
-# -----------------------------
-class JinaSettings(BaseModel):
-    api_key: str = Field(default="", description="Jina API key")
-    url: str = Field(default="https://api.jina.ai/v1/embeddings", description="Jina API URL")
-    model: str = Field(default="jina-embeddings-v3", description="Jina model name")  # 1024
-
-
-# -----------------------------
 # Hugging Face Settings
 # -----------------------------
 # Used for:
@@ -178,9 +169,7 @@ class Settings(BaseSettings):
     document: DocumentSettings = Field(default_factory=DocumentSettings)
     text_splitter: TextSplitterSettings = Field(default_factory=TextSplitterSettings)
 
-    jina: JinaSettings = Field(default_factory=JinaSettings)
     hugging_face: HuggingFaceSettings = Field(default_factory=HuggingFaceSettings)
-    openai: OpenAISettings = Field(default_factory=OpenAISettings)
     opik: OpikObservabilitySettings = Field(default_factory=OpikObservabilitySettings)
     modal: ModalSettings = Field(default_factory=ModalSettings)
     yarngpt: YarnGPTSettings = Field(default_factory=YarnGPTSettings)

@@ -132,7 +132,8 @@ async def text_to_speech(
     try:
         async with httpx.AsyncClient(timeout=120.0) as client:  
             logger.info(f"Sending request to {settings.yarngpt_api_url}")
-            logger.info(f"Payload: {payload}")
+            # Removed payload log to prevent exposing user text
+            logger.debug(f"TTS request: language={language}, voice={voice}, text_length={len(text)}")
             logger.info(f"Using API key: {settings.yarngpt_api_key[:20]}...")
             
             response = await client.post(
@@ -145,7 +146,8 @@ async def text_to_speech(
             
             if response.status_code != 200:
                 error_text = response.text
-                logger.error(f"YarnGPT error response: {error_text}")
+                # Sanitized error log to prevent exposing sensitive data
+                logger.error(f"YarnGPT error response (status {response.status_code}): {error_text[:200] if len(error_text) > 200 else error_text}")
                 raise ValueError(f"YarnGPT API returned {response.status_code}: {error_text}")
             
             response.raise_for_status()
@@ -164,7 +166,9 @@ async def text_to_speech(
     except httpx.HTTPStatusError as e:
         logger.error(f"YarnGPT HTTP error: {e}")
         logger.error(f"Response status: {e.response.status_code}")
-        logger.error(f"Response body: {e.response.text}")
+        # Sanitized error log to prevent exposing sensitive data
+        error_body = e.response.text[:200] if len(e.response.text) > 200 else e.response.text
+        logger.error(f"Response body (truncated): {error_body}")
         raise ValueError(f"YarnGPT API error ({e.response.status_code}): {e.response.text}")
     except httpx.HTTPError as e:
         logger.error(f"YarnGPT TTS connection error: {type(e).__name__}: {str(e)}")

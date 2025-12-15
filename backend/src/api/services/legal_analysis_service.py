@@ -250,7 +250,8 @@ Based on your tenancy agreement (Section X), [one clear sentence about what it s
 
 Please respond in {'Yoruba' if language == 'yo' else 'Hausa' if language == 'ha' else 'Igbo' if language == 'ig' else 'English'}."""
 
-    logger.debug(f"Legal analysis prompt (streaming, first 500 chars): {analysis_prompt[:500]}...")
+    # Removed debug log to prevent exposing user agreement text
+    logger.debug(f"Legal analysis prompt built (streaming) with {len(unique_contexts)} context chunks, agreement text length: {len(agreement_text)}")
 
     yield "__progress__:Generating analysis...\n"
 
