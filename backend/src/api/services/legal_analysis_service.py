@@ -91,14 +91,6 @@ async def analyze_agreement_for_risks_stream(
             logger.error(f"Error during RAG query '{label}': {e}", exc_info=True)
             results.append((label, []))
             yield f"__progress__:⚠ {label.capitalize()} failed\n"
-    except asyncio.TimeoutError:
-        logger.error("RAG queries timed out after 30 seconds")
-        yield "__error__: Analysis timed out while searching for legal context. Please try again.\n"
-        return
-    except Exception as e:
-        logger.error(f"Error during RAG queries: {e}", exc_info=True)
-        yield f"__error__: Error during analysis: {str(e)}\n"
-        return
     
     for label, contexts in results:
         yield f"__progress__:✓ {label.capitalize()} analyzed\n"
