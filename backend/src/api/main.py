@@ -133,11 +133,28 @@ common_dev_ports = ["http://localhost:8080", "http://localhost:3000", "http://lo
 for port in common_dev_ports:
     if port not in allowed_origins:
         allowed_origins.append(port)
-logger.info(f"CORS allowed origins: {allowed_origins}")
+
+# Add Vercel deployment URL pattern matcher
+# This allows any Vercel deployment URL matching: https://lauyami-*-hamzat-tiamiyus-projects.vercel.app
+import re
+vercel_pattern = re.compile(r"^https://lauyami-[a-z0-9]+-hamzat-tiamiyus-projects\.vercel\.app$")
+
+def is_origin_allowed(origin: str) -> bool:
+    """Check if an origin is allowed, including Vercel deployment URLs."""
+    if origin in allowed_origins:
+        return True
+    # Check if it matches Vercel deployment URL pattern
+    if vercel_pattern.match(origin):
+        logger.debug(f"Allowing Vercel deployment URL: {origin}")
+        return True
+    return False
+
+logger.info(f"CORS allowed origins: {allowed_origins} (plus Vercel deployment URLs matching pattern)")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,  # ["*"],  # allowed_origins,
+    allow_origin_regex=r"https://lauyami-[a-z0-9]+-hamzat-tiamiyus-projects\.vercel\.app",  # Allow any Vercel deployment URL
+    allow_origins=allowed_origins,  # Explicitly listed origins
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],  # only the methods the app uses
     allow_headers=["Authorization", "Content-Type"],  # only headers needed
