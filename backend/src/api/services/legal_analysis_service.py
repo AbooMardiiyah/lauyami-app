@@ -47,13 +47,16 @@ async def analyze_agreement_for_risks_stream(
     async def fetch_context(query_info: tuple[str, str]) -> tuple[str, list[SearchResult]]:
         query, label = query_info
         try:
+            # Use smaller limit for RAG queries to reduce memory usage
+            # The search_service will fetch limit * 100 points, so limit=2 = 200 points
+            # We only need 2 results, so this is sufficient
             contexts = await query_with_filters(
                 request=request,
                 query_text=query,
                 session_id=session_id,
                 document_title="Lagos State Tenancy Law 2011",
                 jurisdiction="Lagos State",
-                limit=2, 
+                limit=2,  # Only need 2 chunks per query
             )
             if contexts is None:
                 return (label, [])
@@ -65,17 +68,29 @@ async def analyze_agreement_for_risks_stream(
             logger.warning(f"Error searching for context '{query}': {e}")
             return (label, [])
 
-    logger.info(f"Starting {len(search_queries)} RAG queries in parallel (2 chunks each)")
+    logger.info(f"Starting {len(search_queries)} RAG queries sequentially to reduce memory usage (2 chunks each)")
     
-    for _, label in search_queries:
+    # Run queries sequentially instead of in parallel to reduce memory pressure
+    # Each query loads embedding models, so parallel execution causes OOM
+    results = []
+    for query_info in search_queries:
+        _, label = query_info
         yield f"__progress__:Analyzing {label}...\n"
-    
-    # Add timeout to prevent hanging
-    try:
-        results = await asyncio.wait_for(
-            asyncio.gather(*[fetch_context(query) for query in search_queries]),
-            timeout=30.0  # 30 second timeout for RAG queries
-        )
+        try:
+            result = await asyncio.wait_for(
+                fetch_context(query_info),
+                timeout=15.0  # 15 second timeout per query
+            )
+            results.append(result)
+            yield f"__progress__:✓ {label.capitalize()} analyzed\n"
+        except asyncio.TimeoutError:
+            logger.error(f"RAG query '{label}' timed out after 15 seconds")
+            results.append((label, []))
+            yield f"__progress__:⚠ {label.capitalize()} timed out\n"
+        except Exception as e:
+            logger.error(f"Error during RAG query '{label}': {e}", exc_info=True)
+            results.append((label, []))
+            yield f"__progress__:⚠ {label.capitalize()} failed\n"
     except asyncio.TimeoutError:
         logger.error("RAG queries timed out after 30 seconds")
         yield "__error__: Analysis timed out while searching for legal context. Please try again.\n"
