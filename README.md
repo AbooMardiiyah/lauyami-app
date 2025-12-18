@@ -57,6 +57,7 @@
   - [Technology Stack](#technology-stack)
   - [Getting Started](#getting-started)
     - [Local Development](#local-development)
+    - [Common Make Commands](#common-make-commands)
     - [Deployment](#deployment)
   - [Live Demo](#live-demo)
   - [Services \& Providers](#services--providers)
@@ -67,6 +68,8 @@
 ## About Lauyami
 
 Lauyami is an AI-powered legal assistant that helps tenants and landlords understand tenancy agreements in the context of Lagos State Tenancy Law 2011. The application provides:
+
+**Try Lauyami here** : [Lauya-mi AI](https://lauyami-pw2iorq16-hamzat-tiamiyus-projects.vercel.app/)  : Your AI Tenancy agreement Assistant
 
 - **Document Analysis**: Upload your tenancy agreement and get instant analysis highlighting rights, warnings, and potentially predatory clauses
 - **Multilingual Voice Support**: Ask questions about your agreement in 4 Nigerian languages (English, Yoruba, Hausa, Igbo)
@@ -275,6 +278,43 @@ The repository includes sample tenancy agreement PDFs in the `tenancy_agreements
 - Structural problems
 
 **Important Note**: These are **simulated test documents** created for demonstration purposes. All names, locations, addresses, and other identifying information are **fictional and not real**. These documents are designed to showcase various types of legal issues that may appear in tenancy agreements and should only be used for testing the application's analysis capabilities.
+
+### Common Make Commands
+
+The backend includes a comprehensive Makefile with useful commands for development and deployment. Here are some commonly used commands:
+
+**Docker Commands:**
+```bash
+make docker-build    # Build Docker image for the backend
+make docker-run      # Run Docker container on port 8000 (requires .env file)
+make docker-stop     # Stop running Docker container(s)
+```
+
+**Development Commands:**
+```bash
+make run-dev         # Run FastAPI development server on port 8000
+make run-api         # Run FastAPI application
+```
+
+**Testing & Quality:**
+```bash
+make all-tests       # Run all tests (unit + integration)
+make ruff-check      # Check code lint violations
+make ruff-format     # Check code format violations
+make mypy            # Run static type checking
+```
+
+**Database & Infrastructure:**
+```bash
+make supabase-create      # Create Supabase database
+make qdrant-create-collection  # Create Qdrant collection
+make qdrant-ingest-from-sql    # Ingest data from SQL to Qdrant
+```
+
+For a complete list of all available Make commands, see the [Makefile](backend/Makefile) or run:
+```bash
+make help
+```
 
 ### Deployment
 
