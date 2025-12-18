@@ -69,7 +69,7 @@
 
 Lauyami is an AI-powered legal assistant that helps tenants and landlords understand tenancy agreements in the context of Lagos State Tenancy Law 2011. The application provides:
 
-**Try Lauyami here** : [Lauya-mi AI](https://lauyami-pw2iorq16-hamzat-tiamiyus-projects.vercel.app/)  : Your AI Tenancy agreement Assistant
+**Try Lauyami here** : [Lauya-mi](https://lauyami-pw2iorq16-hamzat-tiamiyus-projects.vercel.app/)  : Your AI Tenancy agreement Assistant
 
 - **Document Analysis**: Upload your tenancy agreement and get instant analysis highlighting rights, warnings, and potentially predatory clauses
 - **Multilingual Voice Support**: Ask questions about your agreement in 4 Nigerian languages (English, Yoruba, Hausa, Igbo)
