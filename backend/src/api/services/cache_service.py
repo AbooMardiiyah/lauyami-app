@@ -72,7 +72,6 @@ def set_cached_analysis(agreement_text: str, analysis: str, language: str = "en"
     
     logger.info(f"Cached analysis for key {cache_key[:8]}... (total cached: {len(_analysis_cache)})")
     
-    # Clean up old entries if cache gets too large
     if len(_analysis_cache) > 1000:
         _cleanup_expired_cache()
 
