@@ -8,17 +8,13 @@ Supports:
 """
 
 import base64
-
+import time
 import httpx
 
 from src.config import settings
 from src.utils.logger_util import setup_logging
 
 logger = setup_logging()
-
-# -----------------------
-# ASR Service Configuration
-# -----------------------
 modal_settings = settings.modal
 
 
@@ -45,23 +41,18 @@ async def transcribe_audio(
             "Modal ASR base URL not configured. Set MODAL__ASR_BASE_URL in .env"
         )
 
-    # Validate language code
     supported = modal_settings.supported_languages
     if language_code not in supported:
         raise ValueError(
             f"Language code '{language_code}' not supported. "
             f"Supported codes: {list(supported.keys())}"
         )
-
-    # Log audio size for debugging
     audio_size_mb = len(audio_bytes) / (1024 * 1024)
     logger.info(
         f"Starting ASR transcription: language={language_code}, "
         f"audio_size={audio_size_mb:.2f}MB"
     )
 
-    # Encode audio to base64
-    import time
     start_time = time.time()
     audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
     encode_time = time.time() - start_time
