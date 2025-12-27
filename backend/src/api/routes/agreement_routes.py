@@ -4,11 +4,10 @@ import asyncio
 import json
 from fastapi import APIRouter, File, Form, Request, UploadFile
 from fastapi.responses import StreamingResponse
-
-# UploadAgreementResponse is available for future non-streaming endpoints
 from src.api.services.document_storage_service import (
     generate_session_id,
     store_uploaded_document,
+    delete_session
 )
 from src.api.services.legal_analysis_service import (
     analyze_agreement_for_risks_stream,
@@ -121,8 +120,6 @@ async def delete_session_endpoint(session_id: str):
         dict: Success message.
 
     """
-    from src.api.services.document_storage_service import delete_session
-
     deleted = delete_session(session_id)
     if deleted:
         return {"message": "Session deleted successfully", "session_id": session_id}
