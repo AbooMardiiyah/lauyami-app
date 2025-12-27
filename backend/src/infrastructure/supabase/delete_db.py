@@ -27,19 +27,15 @@ def delete_all_tables(confirm: bool = False) -> None:
         Exception: For unexpected errors during table inspection or deletion.
 
     """
-    # Initialize the SQLAlchemy engine
     engine = init_engine()
     try:
-        # Create an inspector to check existing tables
         inspector = inspect(engine)
         existing_tables = inspector.get_table_names()
 
-        # Check if there are any tables to delete
         if not existing_tables:
             logger.info("No tables found in the database. Nothing to delete.")
             return
 
-        # Prompt user for confirmation to prevent accidental data loss (unless confirm=True)
         if not confirm:
             try:
                 user_confirm = input(
@@ -53,7 +49,6 @@ def delete_all_tables(confirm: bool = False) -> None:
                 logger.warning("No input available (non-interactive mode). Skipping confirmation.")
                 logger.info("Proceeding with table deletion...")
 
-        # Drop all tables defined in Base.metadata
         logger.info(f"Dropping all tables: {existing_tables}")
         Base.metadata.drop_all(bind=engine)
         logger.info("All tables dropped successfully.")
@@ -65,7 +60,6 @@ def delete_all_tables(confirm: bool = False) -> None:
         logger.error(f"Unexpected error dropping tables: {e}")
         raise
     finally:
-        # Dispose of the engine to release connections
         engine.dispose()
         logger.info("Database engine disposed.")
 

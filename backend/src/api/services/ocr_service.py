@@ -97,7 +97,7 @@ async def _extract_text_from_image(image_bytes: bytes) -> str:
         )
     
     try:
-        reader = easyocr.Reader(["en"], gpu=False)  # Use CPU (GPU not available in container)
+        reader = easyocr.Reader(["en"], gpu=False)  
 
         image = Image.open(io.BytesIO(image_bytes))
         if image.mode != "RGB":
@@ -107,7 +107,7 @@ async def _extract_text_from_image(image_bytes: bytes) -> str:
 
         results = reader.readtext(img_array)
 
-        text_lines = [result[1] for result in results]  # result[1] is the text
+        text_lines = [result[1] for result in results] 
         extracted_text = "\n".join(text_lines)
 
         logger.info(f"OCR extracted {len(extracted_text)} characters from image")

@@ -11,7 +11,7 @@ set -e
 #-----------------------
 
 if [ ! -f .env ]; then
-    echo "❌ .env file not found!"
+    echo " .env file not found!"
     exit 1
 fi
 
@@ -19,7 +19,7 @@ set -o allexport
 source .env
 set +o allexport
 
-echo "✅ Environment variables loaded."
+echo "Environment variables loaded."
 
 PROJECT_ID="lauyami-app"
 SERVICE_NAME="lauyami-backend"
@@ -37,11 +37,11 @@ gcloud services enable \
     containerregistry.googleapis.com
 
 
-echo "🐳 Building and pushing Docker image..."
+echo " Building and pushing Docker image..."
 gcloud builds submit --config cloudbuild_fastapi.yaml \
     --substitutions=_SERVICE_NAME=$SERVICE_NAME
 
-echo "🚀 Deploying $SERVICE_NAME to Cloud Run..."
+echo "Deploying $SERVICE_NAME to Cloud Run..."
 gcloud run deploy "$SERVICE_NAME" \
 --image "$IMAGE_NAME" \
 --platform managed \
@@ -71,7 +71,7 @@ gcloud run deploy "$SERVICE_NAME" \
 --set-env-vars YARNGPT__API_URL=$YARNGPT__API_URL \
 --set-env-vars "^@^ALLOWED_ORIGINS=$ALLOWED_ORIGINS@" \
 
-echo "✅ Allowed origins set to: $ALLOWED_ORIGINS"
+echo "Allowed origins set to: $ALLOWED_ORIGINS"
 
 SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region=$REGION --format='value(status.url)')
 echo "Deployment complete!"

@@ -51,16 +51,13 @@ class AsyncQdrantVectorStore:
         """Initialize AsyncQdrantVectorStore with Qdrant client and embedding models."""
         vector_db = settings.qdrant
 
-        # -------------------------------
-        # Models & configs
-        # -------------------------------
         self.dense_model = TextEmbedding(
             model_name=vector_db.dense_model_name,
-            cache_dir=cache_dir,  # Only uses cache_dir if provided
+            cache_dir=cache_dir, 
         )
         self.sparse_model = SparseTextEmbedding(
             model_name=vector_db.sparse_model_name,
-            cache_dir=cache_dir,  # Only uses cache_dir if provided
+            cache_dir=cache_dir,  
         )
         self.embedding_size = vector_db.vector_dim
         self.sparse_batch_size = vector_db.sparse_batch_size
@@ -69,9 +66,6 @@ class AsyncQdrantVectorStore:
         self.upsert_batch_size = vector_db.upsert_batch_size
         self.max_concurrent = vector_db.max_concurrent
 
-        # -------------------------------
-        # Qdrant client & collection
-        # -------------------------------
         self.client = AsyncQdrantClient(url=vector_db.url, api_key=vector_db.api_key)
         self.collection_name = vector_db.collection_name
         self.splitter = TextSplitter()
@@ -86,20 +80,11 @@ class AsyncQdrantVectorStore:
             )
         )
 
-        # -------------------------------
-        # Logging
-        # -------------------------------
         self.logger = setup_logging()
         self.log_batch_status = partial(log_batch_status, self.logger)
 
-        # -------------------------------
-        # Jina settings (removed)
-        # -------------------------------
-        self.use_jina = False  # Jina integration removed
+        self.use_jina = False  #
 
-        # -------------------------------
-        # Hugging Face settings (optional)
-        # -------------------------------
         self.hugging_face_settings = settings.hugging_face
 
         self.hf_client = InferenceClient(
@@ -107,11 +92,7 @@ class AsyncQdrantVectorStore:
             api_key=self.hugging_face_settings.api_key,
         )
         self.hf_model = self.hugging_face_settings.model
-        self.use_hf = False  # Set to True to enable HF integration
-
-    # -----------------------
-    # Collection management
-    # -----------------------
+        self.use_hf = False  
 
     async def create_collection(self) -> None:
         """Create Qdrant collection if it does not exist.
@@ -190,9 +171,7 @@ class AsyncQdrantVectorStore:
             self.logger.error(f"Failed to delete collection '{self.collection_name}': {e}")
             raise RuntimeError("Error deleting Qdrant collection") from e
 
-    # -------------------------------
-    # Update collection to enable HNSW
-    # -------------------------------
+  
     async def enable_hnsw(self, m: int = 16, indexing_threshold: int = 20000) -> None:
         """Enable HNSW indexing for the Qdrant collection.
 
@@ -230,9 +209,7 @@ class AsyncQdrantVectorStore:
             self.logger.error(f"Failed to enable HNSW for collection '{self.collection_name}': {e}")
             raise RuntimeError("Error enabling HNSW indexing") from e
 
-    # -----------------------
-    # Indexes
-    # -----------------------
+
     async def create_jurisdiction_index(self) -> None:
         """Create keyword index for jurisdiction field.
 
@@ -334,10 +311,6 @@ class AsyncQdrantVectorStore:
             self.logger.error(f"Failed to create title index: {e}")
             raise RuntimeError("Error creating title index") from e
 
-    # -----------------------
-    # Embeddings
-    # -----------------------
-
     def jina_dense_vectors(self, texts: list[str]) -> list[list[float]]:
         """Generate dense vectors using Jina API.
 
@@ -421,43 +394,6 @@ class AsyncQdrantVectorStore:
             self.logger.error(f"Failed to generate sparse vectors: {e}")
             raise
 
-    # -----------------------
-    # Embedding helpers (memory-efficient)
-    # -----------------------
-    # async def embed_batch_async(
-    #     self, texts: list[str]
-    # ) -> tuple[list[list[float]], list[SparseVector]]:
-    #     """Generate dense and sparse embeddings concurrently for a batch of texts.
-
-    #     Args:
-    #         texts (list[str]): List of text strings to embed.
-
-    #     Returns:
-    #         tuple[list[list[float]], list[SparseVector]]: Dense and sparse embeddings.
-
-    #     Raises:
-    #         RuntimeError: If embedding generation fails.
-    #     """
-    #     try:
-    #         # Run embeddings concurrently in threads
-    #         dense_task = asyncio.to_thread(self.dense_model.embed, texts)
-    #         sparse_task = asyncio.to_thread(
-    #             self.sparse_model.embed, texts, batch_size=self.sparse_batch_size
-    #         )
-    #         dense_result, sparse_result = await asyncio.gather(dense_task, sparse_task)
-
-    #         # Convert to upsert-friendly format
-    #         dense_vecs = [vec.tolist() for vec in dense_result]
-    #         sparse_vecs = [SparseVector(indices=se.indices.tolist(),
-    #                                      values=se.values.tolist()) for se in sparse_result]
-
-    #         # Free memory
-    #         del dense_result, sparse_result
-    #         return dense_vecs, sparse_vecs
-    #     except Exception as e:
-    #         self.logger.error(f"Failed to generate embeddings: {e}")
-    #         raise RuntimeError("Error generating batch embeddings") from e
-
     async def embed_batch_async(
         self, texts: list[str]
     ) -> tuple[list[list[float]], list[SparseVector]]:
@@ -474,14 +410,12 @@ class AsyncQdrantVectorStore:
 
         """
         try:
-            # Run embeddings concurrently in threads
-            dense_task = asyncio.to_thread(self.dense_vectors, texts)  # use dense_vectors() now
+            dense_task = asyncio.to_thread(self.dense_vectors, texts)  
             sparse_task = asyncio.to_thread(
                 self.sparse_model.embed, texts, batch_size=self.sparse_batch_size
             )
             dense_result, sparse_result = await asyncio.gather(dense_task, sparse_task)
 
-            # Convert to upsert-friendly format
             dense_vecs = [
                 vec.tolist() if isinstance(vec, np.ndarray) else vec for vec in dense_result
             ]
@@ -490,7 +424,6 @@ class AsyncQdrantVectorStore:
                 for se in sparse_result
             ]
 
-            # Free memory
             del dense_result, sparse_result
             return dense_vecs, sparse_vecs
         except Exception as e:
@@ -513,9 +446,6 @@ class AsyncQdrantVectorStore:
             Exception: If database query fails.
 
         """
-        # Query is synchronous. For 5 documents ok
-        # But concurrent requests may be needed for larger batches (e.g. 100+ documents).
-        # In this case change to async the init_session.py
         try:
             offset = 0
             while True:
@@ -554,11 +484,10 @@ class AsyncQdrantVectorStore:
             f"from SQL (batch size: {self.document_batch_size})"
         )
         try:
-            # Limit concurrency to avoid ingestion overload into Qdrant
             semaphore = asyncio.Semaphore(max(2, self.max_concurrent))
             total_documents = 0
             total_chunks = 0
-            start_time = time.time()  # cumulative start time
+            start_time = time.time()  
 
             async for documents in self._document_batch_generator(session, from_date=from_date):
                 all_chunks, all_ids, all_payloads = [], [], []
@@ -588,7 +517,6 @@ class AsyncQdrantVectorStore:
                         for i, chunk in enumerate(chunks)
                     ]
 
-                    # Check existing IDs
                     existing_points = await self.client.retrieve(
                         collection_name=self.collection_name, ids=ids
                     )
@@ -612,32 +540,26 @@ class AsyncQdrantVectorStore:
                     all_payloads.extend(new_payloads)
                     total_documents += 1
 
-                # -------------------------------
-                # Process all chunks in batches
-                # -------------------------------
                 for start in range(0, len(all_chunks), self.upsert_batch_size):
                     sub_chunks = all_chunks[start : start + self.upsert_batch_size]
-                    sub_ids: list[int | str] = all_ids[start : start + self.upsert_batch_size]  # type: ignore
+                    sub_ids: list[int | str] = all_ids[start : start + self.upsert_batch_size]  
                     sub_payloads = all_payloads[start : start + self.upsert_batch_size]
 
-                    batch_start_time = time.time()  # start time for this batch
+                    batch_start_time = time.time()  
                     dense_vecs, sparse_vecs = await self.embed_batch_async(sub_chunks)
 
                     async with semaphore:
                         await self.client.upsert(
                             collection_name=self.collection_name,
                             points=Batch(
-                                ids=sub_ids,  # type: ignore
+                                ids=sub_ids,  
                                 payloads=[p.dict() for p in sub_payloads],
-                                vectors={"Dense": dense_vecs, "Sparse": sparse_vecs},  # type: ignore
+                                vectors={"Dense": dense_vecs, "Sparse": sparse_vecs}, 
                             ),
                         )
 
                     total_chunks += len(sub_chunks)
 
-                    # -------------------------------
-                    # Throughput logging
-                    # -------------------------------
                     batch_elapsed = time.time() - batch_start_time
                     batch_speed = len(sub_chunks) / batch_elapsed if batch_elapsed > 0 else 0
 
@@ -662,9 +584,6 @@ class AsyncQdrantVectorStore:
                     del dense_vecs, sparse_vecs, sub_chunks, sub_ids, sub_payloads
                     gc.collect()
 
-            # -------------------------------
-            # Final cumulative average
-            # -------------------------------
             final_elapsed = time.time() - start_time
             final_speed = total_chunks / final_elapsed if final_elapsed > 0 else 0
             self.logger.info(

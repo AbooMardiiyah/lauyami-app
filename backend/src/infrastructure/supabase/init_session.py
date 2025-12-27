@@ -36,20 +36,17 @@ def init_engine() -> Engine:
             f"postgresql://{db.user}:{db.password.get_secret_value()}@{db.host}:{db.port}/{db.name}"
         )
         logger.debug(f"Using engine URL: {engine_url}")
-
-        # Create the engine with connection pooling options for robustness
         engine = create_engine(
             engine_url,
-            pool_size=5,  # Matches number of feeds/tasks
-            max_overflow=10,  # Allow additional connections if pool is full
-            pool_timeout=30,  # Timeout for getting a connection from the pool
-            echo=False,  # Disable SQL statement logging (set to True for debugging)
+            pool_size=5,  
+            max_overflow=10, 
+            pool_timeout=30, 
+            echo=False,  
             connect_args={
                 "client_encoding": "utf8",
             },
         )
 
-        # Test the connection to ensure it’s valid
         with engine.connect():
             logger.debug("Successfully tested database connection")
 

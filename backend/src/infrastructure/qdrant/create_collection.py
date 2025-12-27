@@ -25,13 +25,10 @@ async def main() -> None:
         Exception: For unexpected errors during execution.
 
     """
-    # Initialize the logger
     logger.info("Creating Qdrant collection")
 
     try:
-        # Initialize the AsyncQdrantVectorStore instance
         vectorstore = AsyncQdrantVectorStore()
-        # Create the Qdrant collection asynchronously
         await vectorstore.create_collection()
         logger.info("Qdrant collection created successfully")
 

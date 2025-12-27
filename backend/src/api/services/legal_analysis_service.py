@@ -47,16 +47,13 @@ async def analyze_agreement_for_risks_stream(
     async def fetch_context(query_info: tuple[str, str]) -> tuple[str, list[SearchResult]]:
         query, label = query_info
         try:
-            # Use smaller limit for RAG queries to reduce memory usage
-            # The search_service will fetch limit * 100 points, so limit=2 = 200 points
-            # We only need 2 results, so this is sufficient
             contexts = await query_with_filters(
                 request=request,
                 query_text=query,
                 session_id=session_id,
                 document_title="Lagos State Tenancy Law 2011",
                 jurisdiction="Lagos State",
-                limit=2,  # Only need 2 chunks per query
+                limit=2, 
             )
             if contexts is None:
                 return (label, [])
@@ -69,9 +66,6 @@ async def analyze_agreement_for_risks_stream(
             return (label, [])
 
     logger.info(f"Starting {len(search_queries)} RAG queries sequentially to reduce memory usage (2 chunks each)")
-    
-    # Run queries sequentially instead of in parallel to reduce memory pressure
-    # Each query loads embedding models, so parallel execution causes OOM
     results = []
     for query_info in search_queries:
         _, label = query_info
@@ -79,7 +73,7 @@ async def analyze_agreement_for_risks_stream(
         try:
             result = await asyncio.wait_for(
                 fetch_context(query_info),
-                timeout=15.0  # 15 second timeout per query
+                timeout=15.0  
             )
             results.append(result)
             yield f"__progress__:✓ {label.capitalize()} analyzed\n"
@@ -141,7 +135,6 @@ Based on your tenancy agreement (Section X), [one clear sentence about what it s
 
 Please respond in {'Yoruba' if language == 'yo' else 'Hausa' if language == 'ha' else 'Igbo' if language == 'ig' else 'English'}."""
 
-    # Removed debug log to prevent exposing user agreement text
     logger.debug(f"Legal analysis prompt built (streaming) with {len(unique_contexts)} context chunks, agreement text length: {len(agreement_text)}")
 
     yield "__progress__:Generating analysis...\n"

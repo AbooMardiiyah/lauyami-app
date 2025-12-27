@@ -1,11 +1,7 @@
 from pathlib import Path
-
 from pydantic import BaseModel, Field
 
 
-# -----------------------------
-# Legal Document configuration model
-# -----------------------------
 class DocumentConfig(BaseModel):
     """Configuration model for legal documents to ingest from PDF files."""
     pdf_path: str | Path = Field(description="Path to the PDF file ")

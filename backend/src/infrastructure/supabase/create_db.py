@@ -27,20 +27,16 @@ def create_table() -> None:
         Exception: For unexpected errors during table creation or inspection.
 
     """
-    # Initialize the SQLAlchemy engine
     engine = init_engine()
     try:
-        # Create an inspector to check existing tables
         inspector = inspect(engine)
         existing_tables = inspector.get_table_names()
         table_name = LegalDocument.__tablename__
 
-        # Check if the table already exists
         if table_name in existing_tables:
             logger.info(f"Table '{table_name}' already exists. No action needed.")
         else:
             logger.info(f"Table '{table_name}' does not exist. Creating...")
-            # Create all tables defined in Base.metadata (includes LegalDocument)
             Base.metadata.create_all(bind=engine)
             logger.info(f"Table '{table_name}' created successfully.")
     except SQLAlchemyError as e:
@@ -50,7 +46,6 @@ def create_table() -> None:
         logger.error(f"Unexpected error creating table '{table_name}': {e}")
         raise
     finally:
-        # Dispose of the engine to release connections
         engine.dispose()
         logger.info("Database engine disposed.")
 

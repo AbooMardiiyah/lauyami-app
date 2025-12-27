@@ -34,8 +34,7 @@ async def main() -> None:
         session = init_session(engine)
 
         vectorstore = AsyncQdrantVectorStore()
-
-
+        
         from_date = None  
 
         await vectorstore.ingest_from_sql(session=session, from_date=from_date)

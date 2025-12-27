@@ -31,10 +31,7 @@ async def text_to_speech_chunked(
     Returns:
         list[bytes]: List of audio file bytes for each chunk
     """
-    # Split text into sentences first
     sentences = _split_into_sentences(text)
-    
-    # Group sentences into chunks
     chunks = []
     current_chunk = ""
     
@@ -166,7 +163,6 @@ async def text_to_speech(
     except httpx.HTTPStatusError as e:
         logger.error(f"YarnGPT HTTP error: {e}")
         logger.error(f"Response status: {e.response.status_code}")
-        # Sanitized error log to prevent exposing sensitive data
         error_body = e.response.text[:200] if len(e.response.text) > 200 else e.response.text
         logger.error(f"Response body (truncated): {error_body}")
         raise ValueError(f"YarnGPT API error ({e.response.status_code}): {e.response.text}")

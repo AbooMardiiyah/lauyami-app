@@ -1,12 +1,8 @@
 # src/models/qdrant_models.py
 from datetime import datetime
-
 from pydantic import BaseModel, Field, HttpUrl
 
 
-# -----------------------------
-# Qdrant payload settings for legal documents
-# -----------------------------
 class ArticleChunkPayload(BaseModel):
     """Payload model for legal document chunks in Qdrant."""
     document_title: str = Field(default="", description="Document title (e.g., 'Lagos State Tenancy Law 2011')")

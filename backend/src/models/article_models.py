@@ -1,9 +1,6 @@
 from pydantic import BaseModel, Field
 
 
-# -----------------------------
-# Legal Document settings
-# -----------------------------
 class ArticleItem(BaseModel):
     """Model for legal document sections/chunks."""
     document_title: str = Field(default="", description="Document title (e.g., 'Lagos State Tenancy Law 2011')")

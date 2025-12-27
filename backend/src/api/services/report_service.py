@@ -27,10 +27,7 @@ def generate_summary_report(
     """
     logger.info(f"Generating summary report for session {session_id}")
     
-    # Parse analysis text to extract key sections
     sections = _parse_analysis_sections(analysis_text)
-    
-    # Generate different formats
     text_report = _generate_text_report(
         sections, document_filename, session_id
     )

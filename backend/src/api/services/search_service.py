@@ -101,7 +101,7 @@ async def query_with_filters(
             FieldCondition(key="section_title", match=MatchText(text=title_keywords.strip().lower()))
         )
 
-    query_filter = Filter(must=conditions) if conditions else None  # type: ignore
+    query_filter = Filter(must=conditions) if conditions else None  
 
     fetch_limit = max(1, limit) * 100
     logger.info(f"Fetching up to {fetch_limit} points for unique Ids.")
@@ -126,7 +126,7 @@ async def query_with_filters(
         for point in response.points:
             if point.id in seen_ids:
                 continue
-            seen_ids.add(point.id)  # type: ignore
+            seen_ids.add(point.id)  
             payload = point.payload or {}
             results.append(
                 SearchResult(
@@ -195,7 +195,6 @@ async def query_unique_titles(
     dense_vector = vectorstore.dense_vectors([query_text])[0]
     sparse_vector = vectorstore.sparse_vectors([query_text])[0]
 
-    # Build filter conditions
     conditions: list[FieldCondition] = []
     if jurisdiction:
         conditions.append(FieldCondition(key="jurisdiction", match=MatchValue(value=jurisdiction)))
@@ -226,7 +225,6 @@ async def query_unique_titles(
         logger.warning(f"Error querying reference law collection: {e}")
         response = None
 
-    # Deduplicate by section title
     seen_titles: set[str] = set()
     results: list[SearchResult] = []
     if response and hasattr(response, "points") and response.points:
@@ -250,8 +248,6 @@ async def query_unique_titles(
             if len(results) >= limit:
                 break
 
-    # Sanitized log to prevent exposing user queries
     logger.info(f"Returning {len(results)} unique title results for query (length: {len(query_text)} chars)")
 
-    # logger.info(f"results: {results}")
     return results

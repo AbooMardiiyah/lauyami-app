@@ -14,10 +14,9 @@ Usage:
 import sys
 from pathlib import Path
 from loguru import logger
+from src.pipelines.flows.batch_document_ingestion_flow import batch_document_ingestion_flow
 
 sys.path.insert(0, str(Path(__file__).parent))
-
-from src.pipelines.flows.batch_document_ingestion_flow import batch_document_ingestion_flow
 
 
 def main():
@@ -37,7 +36,7 @@ def main():
         logger.info("      from src.pipelines.flows.embeddings_ingestion_flow import qdrant_ingest_flow")
         logger.info("      import asyncio")
         logger.info("      asyncio.run(qdrant_ingest_flow())")
-        logger.info("\n💡 To add more documents, edit: src/configs/legal_documents.yaml")
+        logger.info("\n To add more documents, edit: src/configs/legal_documents.yaml")
 
     except Exception as e:
         logger.error(f"\nError during document ingestion: {e}")
