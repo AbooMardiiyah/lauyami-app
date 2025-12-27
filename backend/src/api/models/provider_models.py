@@ -3,15 +3,12 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
-
 class ProviderSort(str, Enum):
     latency = "latency"
 
 
 class ModelConfig(BaseModel):
-    # The "entry point" model — required by OpenRouter API
     primary_model: str = Field(default="", description="The initial model requested")
-    # Optional fallback / routing models
     candidate_models: list[str] = Field(
         default_factory=list, description="List of candidate models for fallback or routing"
     )
